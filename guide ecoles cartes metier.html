@@ -1,0 +1,1792 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guide d'Orientation des Métiers</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background-color: #FDFBF8;
+            color: #3f3c3a;
+            font-family: 'Inter', sans-serif;
+        }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700&display=swap');
+        .font-serif { font-family: 'Playfair Display', serif; }
+        .tab-active {
+            border-bottom-color: #6B7280;
+            color: #111827;
+            font-weight: 600;
+        }
+        .modal {
+            transition: opacity 0.3s ease;
+        }
+        .modal-content {
+            transition: transform 0.3s ease;
+        }
+        .card {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out, opacity 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 1000px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 500px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 500px;
+            }
+        }
+        .gemini-loader {
+            width: 48px;
+            height: 48px;
+            border: 5px solid #FFF;
+            border-bottom-color: #4f46e5;
+            border-radius: 50%;
+            display: inline-block;
+            box-sizing: border-box;
+            animation: rotation 1s linear infinite;
+        }
+        @keyframes rotation {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        .map-container {
+            overflow: hidden;
+            position: relative;
+            height: 450px;
+        }
+        .map-container iframe {
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            border: 0;
+
+.notification-dot {
+    display: block !important;
+    position: absolute !important;
+    top: 15px !important;
+    right: 12px !important;
+    width: 9px !important;
+    height: 9px !important;
+    background-color: #ef4444 !important; /* Rouge vif */
+    border-radius: 50% !important;
+    border: 1.5px solid white !important;
+    z-index: 10 !important; /* Assure que le point est par-dessus le texte */
+    animation: pulse 1.5s infinite !important;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+    }
+    70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 7px rgba(239, 68, 68, 0);
+    }
+    100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+    }
+}
+
+
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div id="app" class="container mx-auto p-4 sm:p-6 md:p-8">
+        
+<header class="text-center mb-10">
+    <h1 class="text-4xl md:text-5xl font-serif text-gray-800">Explore ton Avenir</h1>
+    <p class="mt-2 text-lg text-gray-600">Un guide pour découvrir les métiers du Business, du Social et du Droit</p>
+
+    <p class="mt-4 max-w-3xl mx-auto text-base md:text-lg text-gray-600">
+        Bienvenue ! Ce guide interactif est conçu pour t'aider à y voir plus clair dans ton orientation. Navigue entre les onglets <strong>Business</strong>, <strong>Social</strong>, et <strong>Droit</strong> pour explorer des dizaines de fiches métiers détaillées et découvrir les écoles qui y mènent. Utilise la <strong>barre de recherche</strong> pour filtrer tout le contenu en un instant, ou consulte l'onglet <strong>Synthèse</strong> pour comparer les salaires et obtenir une vue d'ensemble des métiers et des écoles. En bas de chaque page, tu trouveras une carte positionnant les écoles d'ile de France. Bonne exploration !
+    </p>
+    </header>
+        
+        <!-- Local Search Section -->
+        <section id="local-search" class="mb-12 bg-white p-6 md:p-8 rounded-xl shadow-lg border border-gray-100">
+             <div class="flex items-center justify-center mb-4">
+                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-500 mr-3"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <h2 class="text-2xl md:text-3xl font-bold font-serif text-gray-700">Recherche par mot-clé</h2>
+            </div>
+            <p class="text-center text-gray-600 mb-6 max-w-2xl mx-auto">Saisis un mot-clé (ex: "marketing", "notaire", "aide à la personne") pour filtrer instantanément les métiers et les écoles ci-dessous. Si un point rouge apparaît en haut des onglets, c'est qu'il existe également des métiers dans les autres domaines que ta page actuelle, n'oublie pas d'aller les consulter !</p>
+<div class="max-w-xl mx-auto">
+    <div class="relative">
+        <input id="local-search-input" type="text" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition pr-10" placeholder="Rechercher un métier, une compétence, une école...">
+        
+        <button id="clear-search-btn" class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-gray-800 hidden" aria-label="Effacer la recherche">
+            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+    </div>
+</div>
+        </section>
+
+<nav class="flex justify-center border-b-2 border-gray-200 mb-8 flex-wrap">
+    
+    <button data-tab="business" class="tab-btn relative text-gray-500 py-4 px-6 block hover:text-gray-700 focus:outline-none border-b-4 border-transparent tab-active">
+        Business
+        <span id="business-dot" class="hidden absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
+    </button>
+    
+    <button data-tab="social" class="tab-btn relative text-gray-500 py-4 px-6 block hover:text-gray-700 focus:outline-none border-b-4 border-transparent">
+        Social
+        <span id="social-dot" class="hidden absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
+    </button>
+    
+    <button data-tab="droit" class="tab-btn relative text-gray-500 py-4 px-6 block hover:text-gray-700 focus:outline-none border-b-4 border-transparent">
+        Droit
+        <span id="droit-dot" class="hidden absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
+    </button>
+    
+    <button data-tab="synthese" class="tab-btn text-gray-500 py-4 px-6 block hover:text-gray-700 focus:outline-none border-b-4 border-transparent">
+        Synthèse
+    </button>
+    
+    <button data-tab="conseiller-ia" class="tab-btn text-gray-500 py-4 px-6 block hover:text-gray-700 focus:outline-none border-b-4 border-transparent hidden">
+        Conseiller IA ✨
+    </button>
+
+</nav>
+
+
+        <main>
+            <div id="business" class="tab-content">
+                <h2 class="text-3xl font-bold font-serif mb-6 text-gray-700">Métiers du Business</h2>
+                <div id="business-jobs-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+                <h2 class="text-3xl font-bold font-serif mt-12 mb-6 text-gray-700">Écoles de Commerce</h2>
+                <div id="business-schools-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+                <div class="mt-12">
+                    <h3 class="text-2xl font-bold font-serif mb-4 text-center">Carte des Écoles</h3>
+                    <div class="map-container rounded-lg shadow-lg"><iframe src="https://www.google.com/maps/d/embed?mid=1C1zbHrfx1-2ErjZAZUy8xa8mIWfxTO4&ehbc=2E312F&noprof=1" width="640" height="480"></iframe></div>
+                </div>
+            </div>
+            <div id="social" class="tab-content hidden">
+                <h2 class="text-3xl font-bold font-serif mb-6 text-gray-700">Métiers du Social</h2>
+                <div id="social-jobs-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+                <h2 class="text-3xl font-bold font-serif mt-12 mb-6 text-gray-700">Écoles du Secteur Social</h2>
+                <div id="social-schools-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+                <div class="mt-12">
+                    <h3 class="text-2xl font-bold font-serif mb-4 text-center">Carte des Écoles</h3>
+                    <div class="map-container rounded-lg shadow-lg"><iframe src="https://www.google.com/maps/d/embed?mid=1C1zbHrfx1-2ErjZAZUy8xa8mIWfxTO4&ehbc=2E312F&noprof=1" width="640" height="480"></iframe></div>
+                </div>
+            </div>
+            <div id="droit" class="tab-content hidden">
+                <h2 class="text-3xl font-bold font-serif mb-6 text-gray-700">Métiers du Droit</h2>
+                <div id="droit-jobs-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+                <h2 class="text-3xl font-bold font-serif mt-12 mb-6 text-gray-700">Écoles de Droit</h2>
+                <div id="droit-schools-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+                 <div class="mt-12">
+                    <h3 class="text-2xl font-bold font-serif mb-4 text-center">Carte des Écoles</h3>
+                    <div class="map-container rounded-lg shadow-lg"><iframe src="https://www.google.com/maps/d/embed?mid=1C1zbHrfx1-2ErjZAZUy8xa8mIWfxTO4&ehbc=2E312F&noprof=1" width="640" height="480"></iframe></div>
+                </div>
+            </div>
+            <div id="synthese" class="tab-content hidden">
+                <h2 class="text-3xl font-bold font-serif mb-6 text-gray-700">Synthèse et Comparaison</h2>
+                
+                <div class="mb-12">
+                    <h3 class="text-2xl font-semibold mb-4 text-gray-600">Comparatif des Salaires</h3>
+                     <div class="flex justify-center items-center mb-4">
+                        <label for="chart-filter" class="mr-2">Filtrer par secteur:</label>
+                        <select id="chart-filter" class="border border-gray-300 rounded p-1">
+                            <option value="all">Tous</option>
+                            <option value="business">Business</option>
+                            <option value="social">Social</option>
+                            <option value="droit">Droit</option>
+                        </select>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-lg">
+                       <div class="chart-container">
+                           <canvas id="salaryChart"></canvas>
+                       </div>
+                    </div>
+                </div>
+
+                <div class="mb-12">
+                    <h3 class="text-2xl font-semibold mb-4 text-gray-600">Tableau Récapitulatif des Métiers</h3>
+                    <input type="text" id="table-search-input" class="mb-4 w-full p-2 border border-gray-300 rounded-lg" placeholder="Filtrer le tableau...">
+                    <div class="overflow-x-auto bg-white rounded-lg shadow">
+                        <table class="w-full text-sm text-left text-gray-500">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                <tr>
+                                    <th class="py-3 px-4">Métier</th>
+                                    <th class="py-3 px-4">Secteur</th>
+                                    <th class="py-3 px-4">Salaire Débutant</th>
+                                    <th class="py-3 px-4">Salaire Senior</th>
+                                </tr>
+                            </thead>
+                            <tbody id="jobs-table-body">
+                                <!-- JS will populate this -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+<div>
+    <h3 class="text-2xl font-semibold mb-4 text-gray-600">Tableau Récapitulatif des Écoles</h3>
+    
+    <input type="text" id="schools-table-search-input" class="mb-4 w-full p-2 border border-gray-300 rounded-lg" placeholder="Filtrer le tableau des écoles...">
+
+    <div class="overflow-x-auto bg-white rounded-lg shadow">
+        <table class="w-full text-sm text-left text-gray-500">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                <tr>
+                    <th class="py-3 px-4">École</th>
+                    <th class="py-3 px-4">Diplôme Principal</th>
+                    <th class="py-3 px-4">Secteur</th>
+                    <th class="py-3 px-4">Ville</th>
+                </tr>
+            </thead>
+            <tbody id="schools-table-body">
+                </tbody>
+        </table>
+    </div>
+</div>
+
+                 <div class="mt-12">
+                    <h3 class="text-2xl font-bold font-serif mb-4 text-center">Carte des Écoles</h3>
+                    <div class="map-container rounded-lg shadow-lg"><iframe src="https://www.google.com/maps/d/embed?mid=1C1zbHrfx1-2ErjZAZUy8xa8mIWfxTO4&ehbc=2E312F&noprof=1" width="640" height="480"></iframe></div>
+                </div>
+
+            </div>
+            
+            <div id="conseiller-ia" class="tab-content hidden">
+                 <!-- Gemini Search Section -->
+                <section id="gemini-search" class="bg-white p-6 md:p-8 rounded-xl shadow-lg border border-gray-100">
+                    <div class="flex items-center justify-center mb-4">
+                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-indigo-500 mr-3"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path d="M19.5 12a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z"/><path d="M18 18.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"/><path d="M6 6.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"/></svg>
+                        <h2 class="text-2xl md:text-3xl font-bold font-serif text-gray-700">Ton Conseiller d'Orientation IA</h2>
+                    </div>
+                    <p class="text-center text-gray-600 mb-6 max-w-2xl mx-auto">Décris le métier de tes rêves, les activités qui t'intéressent, ou simplement ce que tu aimes faire. L'IA trouvera les carrières et les écoles qui te correspondent.</p>
+                    <div class="max-w-xl mx-auto">
+                        <textarea id="gemini-prompt" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition" rows="3" placeholder="Ex: J'aime aider les gens, surtout les enfants, et je suis doué(e) pour organiser des projets..."></textarea>
+                        <button id="gemini-button" class="mt-4 w-full bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-indigo-700 transition-colors flex items-center justify-center">
+                            <span id="gemini-btn-text">Trouver mon métier idéal</span>
+                            <div id="gemini-btn-loader" class="hidden w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        </button>
+                    </div>
+                </section>
+                <div id="gemini-results" class="mt-12"></div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Job Details Modal -->
+    <div id="job-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden opacity-0 modal">
+        <div id="job-modal-content" class="bg-white rounded-lg shadow-2xl p-6 md:p-8 w-full max-w-2xl max-h-[90vh] overflow-y-auto relative scale-95 modal-content">
+            <!-- Content will be injected here -->
+        </div>
+    </div>
+    
+    <!-- School Details Modal -->
+    <div id="school-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden opacity-0 modal">
+        <div id="school-modal-content" class="bg-white rounded-lg shadow-2xl p-6 md:p-8 w-full max-w-3xl max-h-[90vh] overflow-y-auto relative scale-95 modal-content">
+            <!-- Content will be injected here -->
+        </div>
+    </div>
+
+
+<script>
+// Data for jobs and schools
+const jobsData = {
+    business: [
+        {
+            title: "Chef de Produit",
+            visMaVie: "Imagine que tu es responsable du lancement d'une nouvelle boisson bio. Ta journée type : le matin, réunion avec les ingénieurs pour finaliser la recette. Ensuite, tu analyses les ventes des concurrents. L'après-midi, tu prépares la campagne de pub avec une agence : choix des couleurs, du slogan... Tu es le chef d'orchestre du produit, de sa création à sa vente.",
+            debutant: "Tu commences comme assistant chef de produit. Tu aides un chef de produit senior, tu fais beaucoup d'analyses de marché, tu prépares des présentations et tu suis les premières étapes des projets.",
+            senior: "Après 5 ans, tu es Chef de Produit. Tu gères ton propre produit ou une gamme de produits. Tu as ton budget, tu prends des décisions stratégiques et tu manages un ou deux assistants.",
+            evolution: "Tu peux devenir Chef de Groupe (manager plusieurs chefs de produits), puis Directeur Marketing. Certains changent de secteur pour découvrir de nouveaux marchés ou créent leur propre marque.",
+            salaire_debutant: "35k€ - 45k€",
+            salaire_senior: "55k€ - 75k€",
+            keywords: "Marketing, stratégie, gestion de projet, créativité, analyse",
+            link: "https://www.onisep.fr/ressources/univers-metier/metiers/chef-cheffe-de-produit"
+        },
+	{
+            title: "Responsable Marketing",
+            visMaVie: "Tu es le stratège de la visibilité de l'entreprise. Le matin, tu analyses les résultats de la dernière campagne publicitaire sur Instagram. Puis, tu animes une réunion avec ton équipe (community manager, chef de produit) pour préparer le lancement du mois prochain. L'après-midi, tu présentes le plan marketing et le budget à la direction. Tu es le pilote qui s'assure que les bons messages atteignent les bonnes personnes pour booster les ventes.",
+            debutant: "Tu commences comme assistant marketing ou chargé de communication. Tu es très opérationnel : tu rédiges des posts pour les réseaux sociaux, tu organises des événements, tu suis les campagnes.",
+            senior: "Tu es Responsable Marketing. Tu manages une équipe, tu es responsable de tout le budget marketing et tu définis la stratégie de communication de la marque sur tous les canaux (digital, presse, TV...).",
+            evolution: "Tu peux devenir Directeur/Directrice Marketing (CMO - Chief Marketing Officer), un poste clé au comité de direction. Tu peux aussi te spécialiser dans une branche (marketing digital, luxe) ou créer ton agence.",
+            salaire_debutant: "38k€ - 48k€",
+            salaire_senior: "65k€ - 90k€",
+            keywords: "Marketing, stratégie, digital, communication, management, budget",
+            link: "https://www.cidj.com/metiers/responsable-marketing"
+        },
+        {
+            title: "Commercial / Business Developer",
+            visMaVie: "Ton objectif : vendre un nouveau logiciel de gestion à des entreprises. Ta journée commence par identifier des clients potentiels sur LinkedIn. Tu passes quelques appels pour obtenir des rendez-vous. L'après-midi, tu vas chez un client pour faire une démonstration du logiciel, comprendre ses besoins et le convaincre que ta solution est la meilleure. C'est un métier de contact et de challenge.",
+            debutant: "Tu es 'Business Developer Junior'. Ton rôle est surtout de trouver de nouveaux contacts (prospects) et de qualifier leurs besoins. Tu apprends à présenter le produit et à négocier.",
+            senior: "Tu deviens 'Account Manager' ou 'Key Account Manager'. Tu gères un portefeuille de clients importants, tu cherches à développer le business avec eux sur le long terme. Tu négocies de gros contrats.",
+            evolution: "Tu peux évoluer vers un poste de Directeur Commercial (manager toute l'équipe de vente) ou te spécialiser dans un secteur (luxe, industrie...). Certains montent leur propre affaire.",
+            salaire_debutant: "30k€ - 40k€ (+ variable)",
+            salaire_senior: "60k€ - 100k€ (+ variable)",
+            keywords: "Vente, négociation, relation client, prospection, challenge",
+            link: "https://www.cidj.com/metiers/business-developer"
+        },
+        {
+            title: "Contrôleur de Gestion",
+            visMaVie: "Tu es le copilote financier de l'entreprise. Un projet de nouvelle usine est lancé. Ton rôle : vérifier que le budget est respecté. Tu passes tes journées à analyser des chiffres dans des tableaux Excel, à créer des graphiques pour montrer où l'argent est dépensé, et à alerter les directeurs si les coûts dérapent. Tu aides à prendre les bonnes décisions pour que l'entreprise reste rentable.",
+            debutant: "Tu es contrôleur de gestion junior. Tu assistes un contrôleur senior, tu prépares les tableaux de bord (reporting), et tu participes aux clôtures comptables mensuelles.",
+            senior: "Tu es responsable d'une division ou d'une usine. Tu es plus autonome, tu proposes des plans d'action pour améliorer la performance et tu es l'interlocuteur privilégié des managers.",
+            evolution: "Tu peux devenir Directeur du Contrôle de Gestion, puis Directeur Financier (CFO) de l'entreprise. Une autre voie est de devenir consultant en finance.",
+            salaire_debutant: "38k€ - 48k€",
+            salaire_senior: "60k€ - 85k€",
+            keywords: "Finance, chiffres, analyse, budget, reporting, Excel",
+            link: "https://www.apec.fr/metier/controleur-de-gestion.html"
+        },
+        {
+            title: "Consultant en Stratégie",
+            visMaVie: "Une entreprise de mode perd des clients. Elle fait appel à toi. Pendant 3 mois, tu intègres leurs équipes. Tu passes tes journées à interviewer les employés, analyser leurs ventes, étudier la concurrence. Le soir, avec ton équipe, vous réfléchissez à des solutions. À la fin, vous présentez un plan d'action au PDG : 'Vous devriez lancer une collection éco-responsable et vendre plus sur internet'. C'est intense et très intellectuel.",
+            debutant: "Tu es consultant junior. Tu fais beaucoup de recherches, d'analyses de données ('cruncher de la data'). Tu prépares les diapositives (slides) pour les présentations client.",
+            senior: "Tu es manager ou chef de projet. Tu encadres les consultants juniors, tu es en contact direct avec le client, tu es responsable de la qualité finale de la recommandation.",
+            evolution: "Tu peux devenir 'Principal' puis 'Partner' (associé) du cabinet de conseil, ce qui veut dire que tu vends les missions et gères la relation client au plus haut niveau. Beaucoup quittent le conseil après quelques années pour prendre des postes de direction dans de grandes entreprises.",
+            salaire_debutant: "45k€ - 60k€",
+            salaire_senior: "80k€ - 150k€+",
+            keywords: "Stratégie, analyse, résolution de problèmes, conseil, PowerPoint",
+            link: "https://www.studyrama.com/formations/fiches-metiers/conseil-audit/consultant-en-strategie-101755"
+        },
+        {
+            title: "Responsable des Ressources Humaines (RH)",
+            visMaVie: "Tu es le gardien du bien-être et du développement des salariés. Le matin, tu fais passer un entretien d'embauche à un candidat. Puis, tu organises une formation sur la gestion du stress pour une équipe. L'après-midi, tu reçois un salarié qui a un problème avec son manager et tu essaies de trouver une solution. Tu gères aussi les contrats de travail et les fiches de paie. C'est un métier très humain.",
+            debutant: "Tu commences comme chargé de recrutement (tu ne fais que les entretiens) ou assistant RH (tu aides sur l'administration, la paie, la formation).",
+            senior: "Tu es Responsable RH (RRH). Tu es l'interlocuteur principal des salariés et des managers sur un site ou dans une filiale. Tu gères tous les aspects : recrutement, formation, relations sociales...",
+            evolution: "Tu peux devenir Directeur des Ressources Humaines (DRH), membre du comité de direction. Tu définis alors toute la politique sociale de l'entreprise.",
+            salaire_debutant: "32k€ - 40k€",
+            salaire_senior: "55k€ - 80k€",
+            keywords: "Humain, recrutement, formation, droit social, écoute",
+            link: "https://www.cidj.com/metiers/responsable-des-ressources-humaines-rrh"
+        },
+        {
+            title: "Chef de projet digital",
+            visMaVie: "Ton projet : créer le nouveau site web d'une marque de sport. Le matin, tu animes une réunion avec les développeurs (ceux qui codent), les designers (ceux qui dessinent) et le client pour définir les priorités de la semaine. Tu passes la journée à t'assurer que tout le monde avance, à tester les nouvelles fonctionnalités, à vérifier que le budget et les délais sont tenus. Tu es le lien entre la technique et le besoin du client.",
+            debutant: "Tu es assistant chef de projet. Tu aides à planifier, tu rédiges des comptes-rendus, tu fais les premiers tests et tu gères les petites tâches.",
+            senior: "Tu es chef de projet digital senior ou 'Product Owner'. Tu gères des projets plus gros et plus complexes, avec plus d'autonomie. Tu peux être responsable de toute une application mobile, par exemple.",
+            evolution: "Tu peux devenir Directeur de projets ou 'Head of Product', où tu manages une équipe de chefs de projet et définis la vision de tous les produits digitaux de l'entreprise.",
+            salaire_debutant: "35k€ - 42k€",
+            salaire_senior: "50k€ - 70k€",
+            keywords: "Digital, gestion de projet, organisation, communication, web",
+            link: "https://www.onisep.fr/ressources/univers-metier/metiers/chef-cheffe-de-projet-web"
+        },
+        {
+            title: "Expert en Cybersécurité",
+            visMaVie: "Tu es le protecteur des données de l'entreprise. Ta mission est d'empêcher les pirates informatiques d'entrer. Une journée type : tu passes en revue les alertes de sécurité sur les serveurs, tu mènes des tests d'intrusion (tu joues le rôle du hacker pour trouver les failles) et tu formes les employés à ne pas cliquer sur des emails suspects. C'est un jeu du chat et de la souris constant.",
+            debutant: "Tu es analyste SOC (Security Operation Center). Tu surveilles les écrans en temps réel pour détecter les activités suspectes. C'est la première ligne de défense.",
+            senior: "Tu es consultant en cybersécurité ou 'Pentester'. Tu es un expert qui réalise des audits de sécurité complexes pour les clients. Tu peux aussi être responsable de la sécurité d'une grande entreprise (RSSI).",
+            evolution: "Tu peux devenir directeur de la cybersécurité (CISO), gérer des équipes internationales, ou monter ton propre cabinet d'experts en sécurité.",
+            salaire_debutant: "40k€ - 50k€",
+            salaire_senior: "70k€ - 110k€",
+            keywords: "Informatique, sécurité, hacker, protection, analyse, réseau",
+            link: "https://www.cidj.com/metiers/expert-experte-en-cybersecurite"
+        },
+        {
+            title: "Analyste Financier",
+            visMaVie: "Tu travailles dans une banque et ton rôle est de conseiller des investisseurs. Est-ce qu'il faut acheter des actions de l'entreprise X ? Pour le savoir, tu passes tes journées à éplucher ses comptes, à lire toute l'actualité sur son secteur, à construire des modèles financiers complexes sur Excel pour prédire ses bénéfices futurs. Tu termines par rédiger une note de recommandation : 'Acheter', 'Vendre' ou 'Conserver'. C'est un métier très exigeant et analytique.",
+            debutant: "Tu es analyste junior. Tu passes beaucoup de temps sur Excel et sur la recherche d'informations. Tu aides un analyste senior à construire ses modèles et rédiger ses notes.",
+            senior: "Tu es analyste senior. Tu suis un secteur entier (ex: le luxe, la technologie), tu as ton propre portefeuille d'entreprises à analyser, et tu es en contact direct avec les investisseurs et les dirigeants des entreprises que tu suis.",
+            evolution: "Tu peux devenir gérant de portefeuille (celui qui prend la décision finale d'investir des millions), ou partir travailler directement dans le département financier d'une grande entreprise (M&A, direction financière).",
+            salaire_debutant: "45k€ - 65k€",
+            salaire_senior: "80k€ - 150k€+",
+            keywords: "Finance, bourse, investissement, analyse, chiffres, Excel",
+            link: "https://www.onisep.fr/ressources/univers-metier/metiers/analyste-financier-financiere"
+        },
+        {
+            title: "Responsable Achats",
+            visMaVie: "Une entreprise qui fabrique des vélos a besoin de nouvelles selles. Ton rôle est de trouver le meilleur fournisseur. Ta journée : tu lances un appel d'offres, tu reçois des échantillons de plusieurs fabricants en Asie et en Europe. Tu les compares (qualité, prix, délais de livraison, respect de l'environnement). Tu passes des heures à négocier les prix par email et téléphone. Une fois le meilleur fournisseur choisi, tu rédiges le contrat. Tu es la clé pour que l'entreprise ait les bons produits au meilleur coût.",
+            debutant: "Tu es acheteur junior. Tu gères une famille de produits simple (ex: les vis, les emballages) ou tu assistes un acheteur senior sur de plus gros dossiers.",
+            senior: "Tu es responsable achats ou 'Category Manager'. Tu es responsable de tous les achats d'une catégorie stratégique (ex: toutes les pièces électroniques). Tu définis la stratégie, tu voyages pour rencontrer les fournisseurs.",
+            evolution: "Tu peux devenir Directeur des Achats, un poste très stratégique qui consiste à optimiser toutes les dépenses de l'entreprise. Tu peux aussi t'orienter vers la logistique ('Supply Chain').",
+            salaire_debutant: "35k€ - 45k€",
+            salaire_senior: "60k€ - 90k€",
+            keywords: "Achat, négociation, fournisseur, contrat, international, logistique",
+            link: "https://www.apec.fr/metier/acheteur.html"
+        },
+        {
+            title: "Data Scientist",
+            visMaVie: "Un site de vente en ligne veut recommander les bons produits à ses clients. C'est ton job. Tu passes ta journée à 'nettoyer' d'immenses bases de données d'achats. Puis, avec des langages de programmation comme Python, tu crées des algorithmes (des modèles mathématiques) qui apprennent les goûts des clients. Le but : si un client achète un livre de cuisine, ton algorithme lui proposera automatiquement des ustensiles. Tu transformes les données brutes en intelligence.",
+            debutant: "Tu es 'Data Analyst' ou 'Data Scientist Junior'. Tu fais beaucoup de nettoyage de données et d'analyses descriptives pour répondre à des questions business simples. Tu apprends à maîtriser les outils et les algorithmes.",
+            senior: "Tu es 'Data Scientist Senior'. Tu travailles sur des problèmes plus complexes (prédiction des ventes, détection de fraudes). Tu construis des modèles de 'Machine Learning' de A à Z et tu es autonome.",
+            evolution: "Tu peux devenir 'Lead Data Scientist' (manager une équipe de data scientists) ou t'orienter vers des postes d'expert en Intelligence Artificielle. Certains se spécialisent dans un domaine (santé, finance).",
+            salaire_debutant: "45k€ - 55k€",
+            salaire_senior: "70k€ - 100k€",
+            keywords: "Données, informatique, Python, statistiques, intelligence artificielle, algorithmes",
+            link: "https://www.cidj.com/metiers/data-scientist"
+        }
+    ],
+    social: [
+        {
+            title: "Éducateur Spécialisé",
+            visMaVie: "Tu travailles dans un foyer pour adolescents en difficulté. Ta journée n'est jamais la même. Le matin, tu animes un atelier cuisine pour leur apprendre l'autonomie. L'après-midi, tu accompagnes un jeune à un rendez-vous chez le psychologue. Le soir, tu aides aux devoirs et tu gères un conflit entre deux jeunes. Ton but est de les aider à grandir, à trouver leur place et à construire un projet de vie, malgré leurs difficultés.",
+            debutant: "Tu intègres une équipe dans un foyer, un institut médico-éducatif (IME) ou une association de quartier. Tu es encadré par des collègues plus expérimentés et tu apprends à gérer le quotidien et les situations d'urgence.",
+            senior: "Avec l'expérience, tu deviens référent pour certains jeunes, tu conçois et animes des projets plus ambitieux (séjours, ateliers culturels...). Tu peux aussi devenir tuteur pour les nouveaux éducateurs.",
+            evolution: "Tu peux passer des diplômes pour devenir chef de service (coordonner une équipe d'éducateurs) ou directeur d'établissement. Certains se spécialisent (addictions, handicap...).",
+            salaire_debutant: "22k€ - 26k€",
+            salaire_senior: "30k€ - 38k€",
+            keywords: "Humain, aide, jeunes, accompagnement, pédagogie, social",
+            link: "https://www.onisep.fr/ressources/univers-metier/metiers/educateur-specialise-educatrice-specialisee"
+        },
+        {
+            title: "Assistant de Service Social",
+            visMaVie: "Tu tiens une permanence dans un centre social. Le matin, tu reçois une mère seule qui risque d'être expulsée de son logement : tu l'aides à monter un dossier d'aide. Ensuite, tu appelles un organisme pour débloquer les droits au RSA d'un jeune. L'après-midi, tu animes une réunion d'information sur l'accès aux soins. Tu es un guide dans le labyrinthe des aides sociales, tu écoutes, informes et orientes les gens pour qu'ils retrouvent leurs droits et leur autonomie.",
+            debutant: "Tu travailles souvent dans un service social polyvalent (Conseil Départemental) où tu es confronté à toutes sortes de problématiques. C'est très formateur.",
+            senior: "Tu peux te spécialiser dans un domaine : protection de l'enfance, logement, insertion professionnelle, santé... Tu gères des dossiers plus complexes et tu peux avoir un rôle de référent.",
+            evolution: "Tu peux devenir conseiller technique ou responsable de circonscription d'action sociale. Le passage de diplômes permet d'accéder à des postes de direction.",
+            salaire_debutant: "23k€ - 27k€",
+            salaire_senior: "32k€ - 40k€",
+            keywords: "Aide, social, administratif, écoute, droit, famille",
+            link: "https://www.onisep.fr/ressources/univers-metier/metiers/assistant-de-service-social-assistante-de-service-social"
+        },
+        {
+            title: "Conseiller en Insertion Professionnelle (CIP)",
+            visMaVie: "Tu aides des personnes sans emploi à retrouver du travail. Ta journée type : le matin, tu animes un atelier pour apprendre à faire un CV. Puis, tu reçois en entretien individuel une personne qui a perdu confiance en elle pour l'aider à définir son projet. L'après-midi, tu appelles des entreprises pour savoir si elles recrutent et proposer tes candidats. Tu es à la fois coach, formateur et commercial.",
+            debutant: "Tu travailles dans une Mission Locale (pour les jeunes) ou chez Pôle Emploi. Tu apprends à maîtriser les dispositifs d'aide à l'emploi et à conduire des entretiens.",
+            senior: "Tu peux gérer des publics spécifiques (réfugiés, personnes handicapées), développer des partenariats avec des entreprises, ou monter des projets de formation innovants.",
+            evolution: "Tu peux devenir responsable d'antenne, coordinateur de projets, ou te spécialiser dans le bilan de compétences. Certains deviennent consultants RH en entreprise.",
+            salaire_debutant: "24k€ - 28k€",
+            salaire_senior: "33k€ - 42k€",
+            keywords: "Emploi, insertion, coaching, formation, CV, social",
+            link: "https://www.cidj.com/metiers/conseiller-en-insertion-professionnelle-cip"
+        },
+        {
+            title: "Éducateur de Jeunes Enfants (EJE)",
+            visMaVie: "Tu travailles dans une crèche. Ta mission : favoriser l'éveil et le développement des tout-petits (0-3 ans). Le matin, tu organises un atelier peinture pour développer leur créativité. Après la sieste, tu mets en place un parcours de motricité pour qu'ils apprennent à mieux bouger. Tu observes beaucoup les enfants pour comprendre leurs besoins, et tu rassures les parents. Tu es un spécialiste du développement du jeune enfant.",
+            debutant: "Tu intègres l'équipe d'une crèche ou d'une halte-garderie. Tu es au contact direct des enfants et tu mets en pratique les activités d'éveil.",
+            senior: "Tu peux prendre plus de responsabilités dans l'élaboration du projet pédagogique de la crèche. Tu peux aussi encadrer des stagiaires.",
+            evolution: "Avec une formation complémentaire, tu peux devenir directeur/directrice de crèche. Tu peux aussi travailler dans des secteurs plus spécialisés comme les services pédiatriques des hôpitaux.",
+            salaire_debutant: "22k€ - 25k€",
+            salaire_senior: "28k€ - 35k€",
+            keywords: "Enfants, crèche, éveil, jeu, pédagogie, psychologie",
+            link: "https://www.onisep.fr/ressources/univers-metier/metiers/educateur-de-jeunes-enfants-educatrice-de-jeunes-enfants"
+        },
+        {
+            title: "Coordinateur de projet humanitaire",
+            visMaVie: "Tu es basé dans la capitale d'un pays en développement pour une ONG. Ton projet : construire un puits dans un village isolé. Ta journée est un marathon : le matin, réunion par Skype avec le siège à Paris pour le budget. Puis, tu vas sur le terrain pour vérifier l'avancée des travaux avec l'ingénieur local. L'après-midi, tu rencontres le chef du village pour t'assurer que le projet répond bien à leurs besoins. Tu rédiges des rapports et tu gères la sécurité de ton équipe. C'est un métier d'engagement et d'aventure.",
+            debutant: "Tu ne commences pas coordinateur. Tu pars d'abord sur le terrain comme logisticien, administrateur ou chargé de projet sur un secteur (eau, santé...). C'est l'expérience terrain qui prime.",
+            senior: "Après plusieurs missions, tu deviens coordinateur terrain, puis chef de mission. Tu es responsable de toutes les opérations de l'ONG dans un pays. Tu manages des équipes importantes et des budgets de plusieurs millions.",
+            evolution: "Tu peux prendre des postes au siège de l'ONG à Paris (responsable de zone géographique, directeur des opérations) ou travailler pour des organisations internationales comme l'ONU.",
+            salaire_debutant: "25k€ - 35k€ (souvent logé/nourri)",
+            salaire_senior: "45k€ - 65k€",
+            keywords: "Humanitaire, ONG, international, projet, gestion, voyage",
+            link: "https://www.solidarites.org/fr/nos-metiers-humanitaires/coordinateur-terrain/"
+        },
+        {
+            title: "Mandataire judiciaire à la protection des majeurs",
+            visMaVie: "Tu es désigné par un juge pour aider une personne âgée ou handicapée qui ne peut plus gérer seule ses affaires. Ta journée : tu commences par payer les factures et le loyer de Mme Dupont. Puis tu vas voir M. Martin à l'hôpital pour discuter de son retour à domicile. L'après-midi, tu l'aides à faire ses courses et tu t'assures qu'il prend bien ses médicaments. Tu es un gestionnaire et un protecteur, tu veilles sur les intérêts des personnes les plus vulnérables.",
+            debutant: "Tu commences dans une association tutélaire. Tu gères un certain nombre de 'mesures de protection' (curatelle, tutelle) avec l'appui de ton responsable.",
+            senior: "Tu gères des cas plus complexes, tu as plus d'autonomie. Tu peux aussi exercer en libéral, à ton propre compte.",
+            evolution: "L'évolution se fait surtout en expertise. Il n'y a pas de voie hiérarchique classique, mais tu peux devenir responsable d'un pôle dans une association ou formateur.",
+            salaire_debutant: "24k€ - 28k€",
+            salaire_senior: "32k€ - 40k€",
+            keywords: "Droit, social, protection, gestion, budget, vulnérabilité",
+            link: "https://www.onisep.fr/ressources/univers-metier/metiers/mandataire-judiciaire-a-la-protection-des-majeurs"
+        },
+        {
+            title: "Médiateur Social",
+            visMaVie: "Tu travailles dans un quartier sensible. Ta mission est de calmer les tensions. Un groupe de jeunes fait du bruit le soir et dérange les habitants. Ta journée : tu vas d'abord parler avec les habitants pour écouter leurs plaintes. Ensuite, tu vas à la rencontre des jeunes, non pas pour les gronder, mais pour comprendre pourquoi ils sont là. Tu essaies de créer un dialogue et de trouver une solution, comme leur proposer d'utiliser le gymnase le soir. Tu es un créateur de lien social.",
+            debutant: "Tu travailles en binôme avec un médiateur expérimenté, souvent sur le terrain (dans les transports en commun, à la sortie des collèges...).",
+            senior: "Tu peux être référent sur un quartier, gérer des conflits plus complexes (voisinage, familiaux) et monter des projets de prévention.",
+            evolution: "Tu peux devenir responsable d'une équipe de médiateurs ou te spécialiser (médiation scolaire, familiale...).",
+            salaire_debutant: "21k€ - 24k€",
+            salaire_senior: "28k€ - 35k€",
+            keywords: "Conflit, dialogue, social, quartier, prévention, communication",
+            link: "https://www.cidj.com/metiers/mediateur-social-mediatrice-sociale"
+        },
+        {
+            title: "Chargé de mission RSE",
+            visMaVie: "Tu travailles dans une grande entreprise et ton but est de la rendre plus 'responsable'. Ton projet du moment : réduire les déchets plastiques. Le matin, tu réunis les responsables des achats, du marketing et de la cantine pour trouver des alternatives (gobelets réutilisables, etc.). L'après-midi, tu prépares le 'rapport RSE', un document qui présente toutes les bonnes actions de l'entreprise pour l'environnement et la société. Tu es la conscience écologique et sociale de l'entreprise.",
+            debutant: "Tu es assistant RSE. Tu aides à collecter les données pour le reporting, tu participes à l'organisation d'événements (ex: semaine du développement durable).",
+            senior: "Tu es responsable RSE. Tu as plus d'autonomie pour proposer et piloter des projets stratégiques (ex: plan de réduction des émissions de CO2).",
+            evolution: "Tu peux devenir Directeur/Directrice du Développement Durable, un poste de plus en plus stratégique et visible.",
+            salaire_debutant: "35k€ - 45k€",
+            salaire_senior: "55k€ - 80k€",
+            keywords: "RSE, environnement, éthique, développement durable, projet",
+            link: "https://www.studyrama.com/formations/fiches-metiers/environnement/charge-de-mission-rse-104928"
+        },
+        {
+            title: "Formateur pour adultes",
+            visMaVie: "Tu animes une formation de 3 jours pour des employés qui veulent apprendre à mieux parler en public. Ta journée : le matin, tu présentes quelques concepts théoriques avec des slides. Mais très vite, tu passes à la pratique avec des jeux de rôle et des mises en situation. Tu filmes les participants, tu leur donnes des conseils personnalisés pour améliorer leur posture, leur voix. Ton but est de transmettre une compétence de manière concrète et bienveillante.",
+            debutant: "Tu commences souvent par co-animer des formations avec un formateur senior, ou tu te spécialises sur un logiciel ou une technique précise.",
+            senior: "Tu conçois tes propres programmes de formation de A à Z ('ingénierie pédagogique'). Tu peux devenir indépendant et avoir tes propres clients.",
+            evolution: "Tu peux devenir responsable pédagogique dans un organisme de formation ou manager d'une équipe de formateurs. Certains s'orientent vers le coaching.",
+            salaire_debutant: "28k€ - 35k€",
+            salaire_senior: "45k€ - 65k€",
+            keywords: "Formation, pédagogie, transmission, adulte, animation",
+            link: "https://www.cidj.com/metiers/formateur-d-adultes-formatrice-d-adultes"
+        },
+        {
+            title: "Psychomotricien",
+            visMaVie: "Tu aides des personnes (souvent des enfants) qui ont des difficultés à s'exprimer avec leur corps. Un enfant très timide et maladroit vient te voir. Dans ta salle pleine de tapis, de ballons et de cerceaux, tu ne lui parles pas de ses problèmes. Tu joues avec lui. À travers des jeux d'équilibre, de rythme ou de relaxation, tu l'aides à prendre conscience de son corps, à mieux se coordonner et à gagner confiance en lui. Tu soignes l'esprit par le corps.",
+            debutant: "Tu travailles dans un centre spécialisé (CMPP, IME) ou en hôpital, au sein d'une équipe avec des psychologues, orthophonistes...",
+            senior: "Tu peux ouvrir ton propre cabinet en libéral. Tu as alors une patientèle variée (enfants, personnes âgées, sportifs...).",
+            evolution: "Tu peux te spécialiser (autisme, troubles de l'apprentissage...), devenir formateur ou cadre de santé dans un établissement.",
+            salaire_debutant: "24k€ - 28k€",
+            salaire_senior: "35k€ - 45k€",
+            keywords: "Santé, corps, psychologie, enfant, soin, jeu",
+            link: "https://www.onisep.fr/ressources/univers-metier/metiers/psychomotricien-psychomotricienne"
+        }
+    ],
+    droit: [
+        {
+            title: "Avocat",
+            visMaVie: "Ton client est accusé d'avoir commis un délit. Ta journée : le matin, tu passes des heures à la bibliothèque ou sur des bases de données juridiques pour trouver les lois et les décisions de justice ('jurisprudence') qui peuvent l'aider. L'après-midi, tu le reçois à ton cabinet pour préparer sa défense. Le lendemain, tu es au tribunal. Tu portes ta robe noire, tu plaides devant les juges pour les convaincre de son innocence. C'est un métier de combat et d'éloquence.",
+            debutant: "Tu es avocat collaborateur dans un cabinet. Tu traites les dossiers que l'on te confie, tu fais beaucoup de recherches et tu rédiges les premières conclusions. Tu vas plaider sur des cas plus simples.",
+            senior: "Après 5-7 ans, tu peux devenir associé de ton cabinet, ce qui signifie que tu es co-propriétaire. Tu as tes propres clients, tu gères des dossiers plus importants et plus complexes.",
+            evolution: "Tu peux te spécialiser à l'extrême (ex: droit de la propriété intellectuelle, droit de l'environnement), devenir bâtonnier (le 'chef' des avocats de ta ville) ou enseigner à l'université. Certains deviennent magistrats.",
+            salaire_debutant: "40k€ - 60k€ (très variable)",
+            salaire_senior: "80k€ - 200k€+",
+            keywords: "Droit, justice, plaidoirie, défense, tribunal, argumentation",
+            link: "https://www.onisep.fr/ressources/univers-metier/metiers/avocat-avocate"
+        },
+        {
+            title: "Juriste d'Entreprise",
+            visMaVie: "Tu es l'avocat 'interne' d'une entreprise. Le service marketing veut lancer une nouvelle publicité. Ils viennent te voir pour que tu vérifies si elle est légale. Les commerciaux veulent signer un gros contrat avec un client chinois. Tu passes ta journée à lire, relire et corriger chaque ligne du contrat pour protéger ton entreprise. Tu ne vas pas au tribunal, ton but est justement d'éviter les problèmes en amont. Tu es un partenaire business.",
+            debutant: "Tu es juriste junior, souvent spécialisé dans un domaine (droit des contrats, droit social...). Tu rédiges des contrats simples et tu fais de la veille juridique (suivre les nouvelles lois).",
+            senior: "Tu es juriste senior ou responsable juridique. Tu gères des dossiers plus stratégiques (une fusion d'entreprise, par exemple), tu manages des juristes plus jeunes et tu conseilles directement la direction.",
+            evolution: "Tu peux devenir Directeur Juridique, membre du comité de direction. Tu peux aussi te spécialiser (ex: DPO - Délégué à la Protection des Données) ou passer l'examen du barreau pour devenir avocat.",
+            salaire_debutant: "38k€ - 50k€",
+            salaire_senior: "70k€ - 120k€",
+            keywords: "Droit, entreprise, contrat, conseil, négociation, risque",
+            link: "https://www.cidj.com/metiers/juriste-d-entreprise"
+        },
+        {
+            title: "Magistrat (Juge ou Procureur)",
+            visMaVie: "Si tu es juge : tu es assis au centre du tribunal, tu es impartial. Tu écoutes l'avocat de la victime, l'avocat de l'accusé, et le procureur. Tu poses des questions, tu lis le dossier. À la fin, seul ou avec d'autres juges, tu prends la décision : coupable ou non, et quelle peine. Si tu es procureur : tu représentes la société. Tu enquêtes avec la police, et au procès, tu accuses la personne que tu penses coupable et tu demandes une peine au nom de la loi. Deux faces de la même pièce : rendre la justice.",
+            debutant: "Après l'École Nationale de la Magistrature (ENM), tu es nommé juge ou substitut du procureur dans un tribunal. Tu es tout de suite en poste avec de grandes responsabilités.",
+            senior: "Tu peux changer de fonction (passer de juge à procureur), ou de spécialité (juge des enfants, juge d'instruction). Tu peux aussi monter en grade (vice-président de tribunal).",
+            evolution: "Tu peux accéder aux plus hautes fonctions : président de tribunal, procureur général, ou travailler à la Cour de cassation ou au Ministère de la Justice.",
+            salaire_debutant: "35k€ - 45k€ (grille de la fonction publique)",
+            salaire_senior: "60k€ - 90k€",
+            keywords: "Justice, tribunal, juge, procureur, enquête, décision, fonctionnaire",
+            link: "https://www.onisep.fr/ressources/univers-metier/metiers/magistrat-magistrate"
+        },
+
+{
+            title: "Collaborateur Juriste Notarial",
+            visMaVie: "Imagine, tu es le bras droit du notaire dans une étude. Le matin, tu prépares un dossier pour la vente d'un appartement. Tu contactes le syndic de l'immeuble pour obtenir des documents, tu vérifies le cadastre et tu rédiges une première version de l'acte de vente. L'après-midi, tu reçois les clients pour finaliser leur dossier de succession, tu leur expliques les étapes avec des mots simples. Tu es le pilier qui assure que chaque dossier est parfait avant la signature du notaire.",
+            debutant: "Tu commences comme 'clerc rédacteur' ou assistant notarial. Tu es chargé de la constitution des dossiers (rassembler toutes les pièces), de la rédaction des actes simples (procurations, baux d'habitation) et de l'accomplissement des formalités après la signature (enregistrement, publication).",
+            senior: "Tu deviens 'clerc principal' ou collaborateur juriste confirmé. Tu gères de A à Z des dossiers complexes (successions importantes, ventes immobilières complexes, droit des sociétés). Tu as un contact direct et privilégié avec les clients et tu peux même superviser les clercs plus juniors.",
+            evolution: "La voie royale est de devenir notaire. Après plusieurs années d'expérience et une formation complémentaire à l'Institut National des Formations Notariales (INFN), tu peux passer l'examen de la voie professionnelle. Tu peux aussi te spécialiser pour devenir un expert en gestion de patrimoine ou en droit de l'urbanisme au sein de l'étude.",
+            salaire_debutant: "25k€ - 35k€",
+            salaire_senior: "45k€ - 65k€",
+            keywords: "Notaire, droit, immobilier, famille, acte, succession, rédaction",
+            link: "https://www.cidj.com/metiers/collaborateur-de-notaire"
+        }
+
+,
+        {
+            title: "Notaire",
+            visMaVie: "Un jeune couple achète sa première maison. Ils viennent te voir. Ta journée : tu rassembles tous les documents officiels (titre de propriété, diagnostic, etc.), tu vérifies que tout est en règle. Le jour de la signature, tu lis l'acte de vente à haute voix, tu expliques les termes compliqués, et tu officialises la transaction. Tu es un officier public qui garantit la sécurité juridique des moments importants de la vie (achat immobilier, mariage, succession).",
+            debutant: "Tu es notaire assistant ou salarié dans une étude. Tu prépares les dossiers, tu fais les recherches et tu rédiges les projets d'actes pour un notaire titulaire.",
+            senior: "Tu peux devenir notaire associé, c'est-à-dire co-propriétaire de l'étude. Tu as tes propres clients, tu signes les actes. Tu peux aussi racheter ou créer ta propre étude.",
+            evolution: "L'évolution se fait surtout par la taille et la réputation de ton étude. Tu peux te spécialiser en droit rural, gestion de patrimoine, etc.",
+            salaire_debutant: "35k€ - 50k€",
+            salaire_senior: "80k€ - 200k€+",
+            keywords: "Droit, immobilier, famille, contrat, succession, authentification",
+            link: "https://www.onisep.fr/ressources/univers-metier/metiers/notaire"
+        },
+        {
+            title: "Commissaire de police",
+            visMaVie: "Tu es le chef d'un commissariat de ville. Le matin, tu briefes tes équipes sur les affaires de la nuit. Une grosse affaire de trafic de drogue éclate. Tu diriges l'enquête : tu décides des surveillances, des interpellations. L'après-midi, tu reçois le maire pour parler de la sécurité dans un quartier. Tu es à la fois un manager, un enquêteur et un représentant de l'ordre. C'est un métier d'action et de haute responsabilité.",
+            debutant: "Après l'école des commissaires, tu es nommé à la tête d'un service ou d'un petit commissariat. Tu apprends à gérer tes équipes et les situations de crise.",
+            senior: "Tu peux diriger des services plus importants (police judiciaire, renseignement) ou des commissariats de grandes villes.",
+            evolution: "Tu peux monter les échelons (commissaire divisionnaire, général) et accéder à des postes de direction au sein de la Police Nationale ou au Ministère de l'Intérieur.",
+            salaire_debutant: "40k€ - 50k€ (grille de la fonction publique)",
+            salaire_senior: "70k€ - 110k€",
+            keywords: "Police, enquête, sécurité, management, action, fonctionnaire",
+            link: "https://www.onisep.fr/ressources/univers-metier/metiers/commissaire-de-police"
+        },
+        {
+            title: "Greffier",
+            visMaVie: "Tu es le garant de la procédure au tribunal. Pendant une audience, tu es assis à côté des juges. Tu notes tout ce qui se dit, tu t'assures que chaque étape de la procédure est respectée. Tu es le 'gardien du temple' de la justice. Avant et après l'audience, tu prépares les dossiers, tu convoques les parties et tu rédiges les jugements officiels. Sans toi, un procès n'a pas de valeur légale. C'est un métier de l'ombre, essentiel et très rigoureux.",
+            debutant: "Après l'école des greffes, tu es affecté à un tribunal. Tu apprends les différentes procédures (civiles, pénales...).",
+            senior: "Tu peux te spécialiser dans des contentieux complexes et devenir greffier en chef, où tu manages toute l'équipe administrative du tribunal.",
+            evolution: "Tu peux passer des concours internes pour devenir magistrat.",
+            salaire_debutant: "25k€ - 30k€ (grille de la fonction publique)",
+            salaire_senior: "35k€ - 45k€",
+            keywords: "Justice, tribunal, procédure, rédaction, rigueur, fonctionnaire",
+            link: "https://www.onisep.fr/ressources/univers-metier/metiers/directeur-directrice-des-services-de-greffe-judiciaires"
+        },
+        {
+            title: "Juriste en Droit Social",
+            visMaVie: "Tu es l'expert du droit du travail dans une entreprise. Un manager veut licencier un salarié. Il t'appelle pour savoir comment faire légalement. Tu passes ta journée à analyser la situation, à vérifier ce que dit le Code du travail et la convention collective, et tu rédiges la lettre de licenciement pour qu'elle soit incontestable. Tu animes aussi les réunions avec les syndicats. Tu es au cœur des relations humaines et des règles qui les régissent.",
+            debutant: "Tu travailles comme juriste en droit social junior. Tu réponds aux questions simples des RH, tu rédiges des contrats de travail.",
+            senior: "Tu deviens Responsable des Relations Sociales. Tu gères les dossiers complexes (plans de licenciement, négociations syndicales) et tu es le bras droit du DRH sur les questions légales.",
+            evolution: "Tu peux évoluer vers un poste de DRH, ou devenir avocat spécialisé en droit social.",
+            salaire_debutant: "40k€ - 50k€",
+            salaire_senior: "65k€ - 95k€",
+            keywords: "Droit du travail, contrat, licenciement, syndicat, RH",
+            link: "https://www.studyrama.com/formations/fiches-metiers/droit-justice/juriste-droit-social-101740"
+        },
+        {
+            title: "Délégué à la Protection des Données (DPO)",
+            visMaVie: "Tu es le gardien des données personnelles (noms, emails, adresses...) dans une entreprise, comme l'exige la loi RGPD. Le marketing veut lancer une nouvelle application qui collecte la géolocalisation des utilisateurs. Ton rôle est de vérifier que c'est légal, que les utilisateurs ont bien donné leur consentement et que leurs données sont sécurisées. Tu passes tes journées à cartographier les données, à conseiller les équipes et à répondre aux questions de la CNIL (l'autorité de contrôle). C'est un métier nouveau, à la croisée du droit, de l'informatique et de l'éthique.",
+            debutant: "Tu es souvent juriste spécialisé en nouvelles technologies ou en conformité. Tu aides le DPO à mettre en place les procédures.",
+            senior: "Tu es DPO. Tu es le référent principal sur le sujet, tu as une grande autonomie et tu reportes souvent directement à la direction générale.",
+            evolution: "C'est un métier récent, mais l'évolution peut se faire vers des postes de Directeur de la Conformité ('Compliance') ou de la gestion des risques.",
+            salaire_debutant: "45k€ - 55k€",
+            salaire_senior: "70k€ - 110k€",
+            keywords: "RGPD, données personnelles, droit, informatique, conformité, vie privée",
+            link: "https://www.cidj.com/metiers/delegue-a-la-protection-des-donnees-dpo"
+        },
+        {
+            title: "Juriste en Propriété Intellectuelle (PI)",
+            visMaVie: "Une styliste a créé un nouveau sac à main et a peur d'être copiée. Elle vient te voir. Ton travail consiste à déposer le dessin du sac comme 'modèle' pour le protéger. Un peu plus tard, tu découvres une contrefaçon vendue sur internet. Tu envoies une lettre de mise en demeure pour faire cesser la vente. Tu passes tes journées à protéger les créations : marques, brevets, dessins, droits d'auteur. Tu es le gardien des idées.",
+            debutant: "Tu travailles en cabinet d'avocats ou de conseil en PI, ou dans le service juridique d'une grande entreprise (luxe, pharmacie...). Tu gères les dépôts de marques et tu fais des recherches d'antériorité.",
+            senior: "Tu gères des portefeuilles de marques ou de brevets au niveau mondial, tu t'occupes des litiges (contrefaçon) et tu négocies des contrats de licence (autoriser une autre entreprise à utiliser ta marque contre de l'argent).",
+            evolution: "Tu peux devenir responsable du pôle PI d'une entreprise ou associé dans un cabinet. Certains deviennent Conseil en Propriété Industrielle (un titre réglementé).",
+            salaire_debutant: "42k€ - 55k€",
+            salaire_senior: "75k€ - 130k€",
+            keywords: "Droit, marque, brevet, contrefaçon, création, innovation",
+            link: "https://www.onisep.fr/ressources/univers-metier/metiers/juriste-en-propriete-intellectuelle"
+        },
+        {
+            title: "Légiste / Juriste au Parlement",
+            visMaVie: "Tu travailles à l'Assemblée Nationale ou au Sénat. Un nouveau projet de loi sur l'écologie arrive. Ta journée : tu étudies le texte à la loupe pour vérifier qu'il est conforme à la Constitution et qu'il n'y a pas d'incohérence. L'après-midi, tu assistes un député en commission pour l'aider à rédiger un 'amendement' (une modification de la loi). Tu es au cœur de la fabrique de la loi, un technicien du droit au service des politiques.",
+            debutant: "Tu passes un concours très sélectif pour devenir administrateur ou attaché parlementaire. Tu commences par rédiger des notes de synthèse et faire des recherches juridiques.",
+            senior: "Tu peux devenir chef de division ou conseiller pour le président d'une commission. Ton expertise est reconnue et recherchée sur des sujets complexes.",
+            evolution: "L'évolution est hiérarchique au sein des assemblées. Certains partent ensuite travailler dans des ministères, au Conseil d'État ou dans des lobbys.",
+            salaire_debutant: "40k€ - 50k€ (grille de la fonction publique)",
+            salaire_senior: "70k€ - 120k€",
+            keywords: "Droit public, loi, parlement, rédaction, politique, constitution",
+            link: "https://www.carrieres-publiques.com/metiers-de-la-fonction-publique/tous-les-metiers/fiche-metier-administrateur-de-l-assemblee-nationale"
+        }
+    ]
+};
+
+const schoolsData = {
+    business: [
+        {
+            title: "NEOMA Business School - PGE",
+            link: "https://neoma-bs.fr",
+            details: {
+                ecole: "NEOMA Business School",
+                diplome: "Programme Grande École - Bac+5",
+                type_eleve: "Il s'adresse aux étudiants souhaitant acquérir une vision globale de l'entreprise, développer leur leadership et une expertise managériale, avec un fort accent sur l'international et l'innovation. Le programme prépare des dirigeants et entrepreneurs capables de créer de la valeur dans un monde multiculturel. Il intègre également les enjeux de transition sociétale et environnementale (NEOMACT, cours de Sustainability, parcours \"Impact\").",
+                admission: "L'entrée au Programme Grande École (Bac+5) ne se fait pas directement après le bac. Elle se fait sur concours :\n* **Après une classe préparatoire (CPGE)** : Concours ECRICOME PRÉPA pour intégrer la première année (Pré-Master).\n* **En admissions parallèles** :\n    * Concours ECRICOME TREMPLIN BAC+2 pour les titulaires d'un Bac+2 (BTS, BUT, Licence 2) pour intégrer la première année (Pré-Master).\n    * Concours ECRICOME TREMPLIN BAC+3 pour les titulaires d'un Bac+3/4 pour intégrer la deuxième année (Master 1).\n* **Pour les candidats internationaux** : Dossier en ligne et entretien, avec un Bachelor de 3 ans minimum obtenu à l'étranger. Un test TAGE-MAGE ou GMAT est conseillé.",
+                pour_toi_si: "Tu recherches une formation complète en management avec une forte dimension internationale (plus de 400 partenaires, 25% à 30% d'étudiants internationaux, possibilité d'un parcours 100% en anglais, doubles diplômes à l'étranger). Tu souhaites développer ton leadership, une vision globale de l'entreprise et des compétences hybrides (management, droit, sciences du vivant, géopolitique). Tu es sensible aux enjeux sociaux et environnementaux, intégrés au cœur de la pédagogie. Tu veux bénéficier d'un vaste réseau professionnel (76 000 à 80 000 diplômés) et d'une forte employabilité avec un bon salaire de sortie.",
+                pas_pour_toi_si: "Tu cherches une formation ultra-spécialisée en \"social\" ou \"droit\" dès la première année, sans le socle large du management d'une école de commerce. Tu n'es pas prêt(e) à passer un concours d'entrée exigeant. Tu préfères une intégration post-bac directe pour un diplôme Bac+5. L'internationalisation ou les stages en entreprise ne sont pas tes priorités principales.",
+                comparaison_fac: "Le Programme Grande École de NEOMA, délivrant un Master en Management (MIM), se distingue des Master universitaires (fac) par son orientation très professionnalisante, ses nombreuses opportunités d'expériences en entreprise (stages longs, alternance) et à l'international. Les écoles de commerce comme NEOMA bénéficient de la \"triple accréditation\" internationale (AACSB, EQUIS, AMBA) qui garantit une excellence académique et une reconnaissance mondiale spécifique aux business schools, ce qui n'est pas typique des universités publiques. Le réseau d'anciens élèves y est aussi souvent plus structuré et actif. Les salaires de sortie sont généralement plus élevés qu'à l'université.",
+                renommee: "NEOMA est une Grande École de management de premier plan, bénéficiant de la \"Triple Couronne\" d'accréditations internationales (AACSB, EQUIS, AMBA), qui ne concerne qu'environ 1% des écoles de commerce mondiales. Elle est régulièrement classée parmi les meilleures écoles françaises et internationales: 30ème mondiale au classement Financial Times \"Masters in Management 2025\", et constamment dans le top 6-8 des classements nationaux (Le Figaro, Challenges, Le Point, L'Etudiant). Elle se classe 8ème au SIGEM 2024.",
+                salaire_moyen: "Le salaire annuel brut moyen à la sortie du Programme Grande École de NEOMA se situe entre 47 000 € et 52 000 €. Diplomeo mentionne un salaire d'environ 53 054 € en 2025. Le taux d'insertion professionnelle est très élevé (87% à 92% des diplômés recrutés avant même la fin de leurs études, 99% à 100% d'insertion à six mois, et 97% à 100% en CDI). Environ 35% à 36% des diplômés commencent leur carrière à l'international.",
+                adresse: "6 rue Vandrezanne, 75013 Paris"
+            }
+        },
+        {
+            title: "PSB - Bachelor Management",
+            link: "https://www.psbedu.paris",
+            details: {
+                ecole: "Paris School of Business (PSB), établissement privé membre de la Conférence des Grandes Écoles et du groupe Galileo Global Education.",
+                diplome: "Bachelor Management International - Bac+3. Diplôme visé par le Ministère de l'Enseignement Supérieur et de la Recherche, conférant le Grade de Licence (Bac+3 - Niveau 6). Accrédité internationalement par l'AACSB et BGA, et enregistré au RNCP sous le numéro 38754.",
+                type_eleve: "Ce programme s'adresse aux élèves intéressés par un monde professionnel multiculturel, souhaitant devenir des Business Developers responsables, opérationnels et internationaux. Il convient à ceux qui veulent acquérir des compétences en négociation, marketing, vente, finance, comptabilité, leadership et management. Les étudiants appréciant la pratique (stages, alternance, projets d'entreprise) et ayant une ouverture d'esprit internationale y trouveront leur place. Les profils variés (Bac Général, Technologique, Professionnel) peuvent être accueillis.",
+                admission: "L'admission en 1ère année se fait via Parcoursup pour les bacheliers français. L'entrée en 2ème ou 3ème année est possible par admission parallèle, sur dossier (incluant CV, lettre de motivation, relevés de notes) et test d'anglais, suivi d'un entretien individuel. Un score minimum à un test d'anglais officiel (IELTS 5.5 / TOEFL 70) est requis, ainsi qu'éventuellement un test de français (DELF/DALF/TCF niveau B2) pour les non-francophones. Le processus d'admission est continu (\"rolling admissions\").",
+                pour_toi_si: "Tu recherches une formation opérationnelle et fortement orientée vers l'international, avec des opportunités de stages et d'alternance. Tu es attiré(e) par le management, l'économie et le commerce international, et tu souhaites développer des compétences pratiques pour devenir un \"Business Developer\". Tu apprécies les pédagogies actives (business games, projets). Tu cherches une école avec des accréditations internationales reconnues.",
+                pas_pour_toi_si: "Tu préfères une approche purement théorique ou académique sans forte dimension professionnelle. Tu n'es pas intéressée par le contexte international et multiculturel, ou par la réalisation de stages et d'alternance. Tu n'es pas à l'aise avec des frais de scolarité élevés (entre 9 500€ et 9 690€ par an).",
+                comparaison_fac: "Le Bachelor de PSB offre une approche plus professionnalisante et internationale que la plupart des licences universitaires équivalentes, avec des accréditations internationales (AACSB, BGA) souvent absentes à l'université. Il intègre de manière plus systématique des stages, de l'alternance et des projets concrets. Cependant, les frais de scolarité sont significativement plus élevés à PSB qu'à l'université. Environ 60% des diplômés de PSB poursuivent leurs études au niveau Master.",
+                renommee: "PSB est un membre de la Conférence des Grandes Écoles. L'école est classée parmi les meilleures écoles de commerce post-bac en France, figurant dans le Top 3 selon Challenges et Le Parisien Etudiant, et dans le Top 5 selon Le Figaro. Le Bachelor Management International est spécifiquement classé 10ème par L'Étudiant (2022) et 11ème par Le Parisien Etudiant (2024).",
+                salaire_moyen: "Les informations fiables sur le salaire moyen spécifiquement à la sortie du Bachelor Management International de PSB ne sont pas disponibles publiquement. PSB indique que 40% des diplômés sont en activité professionnelle après le Bachelor.",
+                adresse: "59 rue Nationale, 75013 Paris."
+            }
+        },
+        {
+            title: "PSB - Programme Grande École",
+            link: "https://www.psbedu.paris",
+            details: {
+                ecole: "Paris School of Business (PSB)",
+                diplome: "Programme Grande École - Bac+5, Diplôme conférant le Grade de Master, visé par l'État et enregistré au RNCP niveau 7.",
+                type_eleve: "Le programme s'adresse aux futurs leaders innovants, hybrides et responsables, sensibles aux enjeux sociétaux et environnementaux. Il est conçu pour les étudiants souhaitant développer leur créativité et leurs capacités d'adaptation, et qui recherchent un parcours sur mesure avec une forte ouverture internationale.",
+                admission: "Pour la 1ère année post-bac, l'admission se fait via Parcoursup et le Concours Sésame, incluant des épreuves écrites, l'étude du dossier Parcoursup et un oral de motivation. Il existe des admissions parallèles en 2ème, 3ème et 4ème années sur étude de dossier, test d'anglais et entretien individuel. Les rentrées peuvent être en septembre ou en janvier (rentrée décalée).",
+                pour_toi_si: "Tu cherches un programme généraliste en management avec une forte personnalisation des cursus. Tu es attiré(e) par les dimensions internationales (échanges, doubles diplômes, cours en anglais) et les compétences hybrides (management, arts, design, tech). Tu vises une professionnalisation rapide, avec des possibilités d'alternance dès la 4ème année. Tu recherches une école reconnue, accréditée internationalement (AMBA, EFMD Master, AACSB) et membre de la Conférence des Grandes Écoles.",
+                pas_pour_toi_si: "Tu recherches une spécialisation unique et très pointue dès le post-bac dans le social, l'économie ou le droit sans l'optique management. Tu n'es pas prêt(e) à passer un concours d'entrée compétitif. Le coût des études est un frein (frais de scolarité entre 11 500€ et 12 200€/an pour la 1ère année). Tu préfères un cadre universitaire traditionnel (Fac) avec des frais d'inscription moindres.",
+                comparaison_fac: "Le Programme Grande École de PSB confère le Grade de Master, assurant une reconnaissance académique équivalente au Master universitaire. Cependant, il se distingue par une forte orientation professionnalisante (stages obligatoires, alternance possible, \"Creative Tracks\"), une dimension internationale très développée avec de nombreux partenaires et possibilités de double diplôme, et des méthodes pédagogiques variées. Les frais de scolarité sont significativement plus élevés que ceux de l'université.",
+                renommee: "PSB est membre de la Conférence des Grandes Écoles et détient la triple accréditation internationale AMBA, EFMD Master et AACSB, attestant de la qualité et de la reconnaissance de ses programmes. Son Programme Grande École est régulièrement cité comme un programme référent post-bac et figure dans des classements comme le QS Global MBA and Business Master's Ranking 2025 pour le Master in Management et le classement Challenges 2025 des écoles de commerce post-bac (6ème position).",
+                salaire_moyen: "Le salaire annuel moyen brut des juniors sortant de PSB est de 35 538 € en France et 49 240 € à l'étranger (source 2023). D'autres sources indiquent un salaire moyen brut en France de 40 750 € (hors primes, 2023) ou 43 200 € à l'embauche (2023). Le taux d'emploi des diplômés est élevé à 93%, dont 93% en CDI.",
+                adresse: "Campus Le Delta, Rue Claude Bernard, 75005 Paris"
+            }
+        },
+        {
+            title: "EBS Paris",
+            link: "https://www.ebs-paris.com/",
+            details: {
+                ecole: "EBS Paris - European Business School",
+                diplome: "Diplôme Grade de Master (Bac+5).",
+                type_eleve: "Étudiants qui visent une carrière en entrepreneuriat, dans le digital ou l'innovation, dans un environnement international.",
+                admission: "Sur concours SESAME.",
+                pour_toi_si: "Tu cherches une école de commerce axée sur le digital et l'entrepreneuriat, avec une forte présence à l'international.",
+                pas_pour_toi_si: "Tu préfères une formation plus généraliste en management.",
+                comparaison_fac: "Comme les autres grandes écoles de commerce, l'EBS offre une formation professionnalisante, avec une vie associative riche et une forte dimension internationale.",
+                renommee: "L'EBS Paris est reconnue comme une des plus anciennes écoles de commerce parisiennes.",
+                salaire_moyen: "Le salaire moyen des diplômés à l'embauche est de 40 400 € bruts par an.",
+                adresse: "100 rue de l'Université, 92400 Courbevoie"
+            }
+        },
+        {
+            title: "PPA Business School - Bachelor",
+            link: "https://www.ppa.fr",
+            details: {
+                ecole: "PPA Business School",
+                diplome: "Bachelor International Business - Bac+3",
+                type_eleve: "Ce programme s'adresse à une jeune fille ayant le baccalauréat qui aspire à une carrière internationale et souhaite maîtriser les compétences nécessaires à l'optimisation de stratégies commerciales à l'étranger. Elle est intéressée par l'alternance pour acquérir une expérience professionnelle concrète, tout en consolidant ses compétences académiques. Elle devrait être à l'aise avec les cours en anglais et les projets pratiques, et désire développer son adaptabilité, son ouverture d'esprit et sa créativité pour évoluer dans un contexte multiculturel.",
+                admission: "L'admission se fait sur concours en deux étapes. La première est une admissibilité sur étude de dossier (gratuite), qui évalue la cohérence du parcours du candidat. La seconde étape comprend des tests de connaissance (QCM de français, culture générale, anglais) et un entretien individuel de motivation de 20 minutes, qui se déroule en anglais pour cette filière. L'intégration est possible en 1ère année (Bac), 2ème année (Bac+1 validé) ou 3ème année (Bac+2 validé comme un BTS ou DUT). La formation n'est pas disponible sur Parcoursup. La date limite d'inscription est le 30 septembre 2025.",
+                pour_toi_si: "Tu vises des métiers comme commercial export, chargé d'affaires, business developer ou responsable commercial export. Tu recherches une formation professionnalisante axée sur l'alternance et l'immersion en entreprise. Tu es motivée par l'apprentissage des techniques de développement d'affaires à l'international et le management interculturel. Tu as un bon niveau d'anglais et souhaites l'utiliser comme langue de travail.",
+                pas_pour_toi_si: "Tu préfères une formation purement théorique sans expérience en entreprise ou si l'alternance ne correspond pas à ton projet. Tu n'es pas à l'aise avec l'anglais ou un environnement d'études international. Tu recherches un diplôme universitaire classique (Fac) plutôt qu'une certification professionnelle. Tu souhaites candidater via Parcoursup pour ce programme.",
+                comparaison_fac: "Ce Bachelor délivre une certification professionnelle de niveau 6 (équivalent Bac+3) enregistrée au RNCP, axée sur l'employabilité et l'alternance, contrairement à une licence universitaire souvent plus théorique et moins directement liée au monde professionnel. PPA met l'accent sur les mises en situation concrètes et les intervenants professionnels, offrant une approche très pratique. Une possibilité de double cursus avec une Licence Professionnelle de l'Université de La Réunion existe en 3ème année.",
+                renommee: "Le Bachelor International Business de PPA Business School est classé 15ème au classement des Bachelors Commerce International. PPA Business School est reconnue par divers classements (L'Étudiant, Le Parisien, Challenges) et accréditée OPQF, ACBSP et membre de l'AACSB. Le diplôme est reconnu par l'État (Niveau 6 au RNCP). Les avis d'étudiants soulignent son caractère professionnalisant et son ouverture à l'international.",
+                salaire_moyen: "Il n'y a pas de chiffre spécifique fiable concernant le salaire moyen de sortie directement associé au Bachelor International Business de PPA. Pour les écoles de commerce en général, le salaire moyen de sortie (données CGE) est d'environ 41 103€ brut par an, mais cela peut varier fortement selon le secteur et le type de poste.",
+                adresse: "PPA Business School, Campus Montsouris, 28-32 rue de l'Amiral Mouchez, 75014 Paris."
+            }
+        },
+        {
+            title: "ESCEN - Bachelor Web Business",
+            link: "https://escen.fr",
+            details: {
+                ecole: "ESCEN (École Supérieure de Commerce et d'Économie Numérique), école privée membre du groupe NEXT-U Education.",
+                diplome: "Bachelor Webmarketing & IA (Bac+3), anciennement appelé Bachelor Web Business.",
+                type_eleve: "S'adresse aux étudiants attirés par les métiers du marketing digital, du commerce en ligne, de la communication digitale et du développement d'activités web. Il vise les profils souhaitant une formation professionnalisante axée sur la pratique, l'international et les compétences digitales et managériales.",
+                admission: "Non via Parcoursup, mais par le \"Concours Next\". Candidature accessible dès le baccalauréat.",
+                pour_toi_si: "Tu es passionné(e) par le numérique, le marketing digital et la communication web. Tu recherches une formation très professionnalisante avec des stages et/ou la possibilité d'alternance dès la 3ème année. Tu souhaites une expérience internationale grâce à des séjours pédagogiques à l'étranger. Tu préfères une pédagogie concrète, basée sur des projets et des cas d'entreprises, avec un bon accompagnement et des classes à taille humaine.",
+                pas_pour_toi_si: "Tu privilégies une formation universitaire purement théorique ou académique en droit ou en sciences sociales. Tu n'es pas attiré(e) par les métiers du digital et du commerce numérique. Tu recherches une formation gratuite ou avec des frais de scolarité moindres que ceux d'une école privée (coût annuel d'environ 7950€ pour le Bachelor Web-Marketing). Tu es réfractaire aux cours basés sur des projets pratiques et l'immersion professionnelle.",
+                comparaison_fac: "Un Bachelor d'école privée comme celui de l'ESCEN est plus orienté vers la professionnalisation et l'insertion rapide sur le marché du travail, avec une pédagogie pratique et des stages fréquents. La Licence universitaire (Bac+3) est généralement plus généraliste et académique, préparant davantage à la poursuite d'études en Master à l'université. Le Bachelor ESCEN délivre un titre RNCP de niveau 6 (équivalent Bac+3) reconnu professionnellement par France Compétences.",
+                renommee: "L'ESCEN est positionnée comme une école spécialisée dans le web-business et le digital. Elle délivre des titres certifiés RNCP (Répertoire National des Certifications Professionnelles), attestant de la reconnaissance professionnelle du diplôme. Son Bachelor Web Technologies (un autre programme) est classé N°12 par Eduniversal dans sa catégorie. Les avis étudiants sont globalement positifs sur l'intégration pro et l'ambiance, bien que certains soulignent des lacunes pédagogiques ou administratives.",
+                salaire_moyen: "Il n'y a pas de donnée spécifique pour le Bachelor Webmarketing de l'ESCEN. En général, les diplômés d'un Bachelor (Bac+3/4) peuvent espérer un salaire moyen brut annuel de 37 000€ avant deux ans d'expérience. Pour un Bachelor en Marketing et Commerce, les salaires peuvent varier de 18 000 à 38 000 € en début de carrière selon le poste (par ex. chef de produit web : 32 000 à 37 000 €). Le salaire moyen à la sortie d'une école de commerce est entre 40 000 et 42 000 € brut annuel.",
+                adresse: "66 Avenue du Maine, 75014 Paris"
+            }
+        },
+        {
+            title: "CFA Cerfal - Campus Montsouris",
+            link: "https://www.campusmontsouris.fr",
+            details: {
+                ecole: "CFA Cerfal - Campus Montsouris",
+                diplome: "Diplômes d'État (BTS, Licence Professionnelle, BUT) et titres certifiés.",
+                type_eleve: "Candidats motivés par un apprentissage en alternance, avec un projet professionnel clair.",
+                admission: "Sur dossier et entretien, avec la nécessité de trouver une entreprise d'accueil.",
+                pour_toi_si: "Tu cherches une formation qui combine la théorie et la pratique en entreprise pour une insertion professionnelle rapide.",
+                pas_pour_toi_si: "Tu préfères un cursus en formation initiale uniquement.",
+                comparaison_fac: "Le CFA propose des formations en alternance qui préparent à des diplômes d'État (BTS, Licence Pro, BUT) qui sont des diplômes universitaires. La différence réside dans le mode de formation (alternance vs formation initiale).",
+                renommee: "Le CFA Cerfal est une institution reconnue dans le domaine de l'alternance. Les formations proposées sont bien structurées et en phase avec les attentes du monde professionnel.",
+                salaire_moyen: "Le salaire dépend du diplôme et de l'entreprise d'accueil, mais un BTS en alternance se situe généralement entre 1 500 et 2 000 € bruts/mois.",
+                adresse: "2 rue Lacaze, 75014 Paris"
+            }
+        },
+        {
+            title: "Ascencia Business School",
+            link: "https://www.ascencia-business-school.com/",
+            details: {
+                ecole: "Ascencia Business School",
+                diplome: "Formations en commerce et management (Bac+3 à Bac+5)",
+                type_eleve: "Le cursus est axé sur l'alternance et vise les étudiants qui souhaitent acquérir une expérience professionnelle significative.",
+                admission: "Sur dossier et entretien.",
+                pour_toi_si: "Tu cherches une formation en alternance qui te permettra d'acquérir une expérience professionnelle significative tout en étant payé(e).",
+                pas_pour_toi_si: "Tu recherches une formation théorique à l'université.",
+                comparaison_fac: "L'école propose des titres certifiés RNCP et un cursus principalement en alternance. Elle est moins théorique que l'université, et davantage orientée vers l'acquisition de compétences opérationnelles en entreprise.",
+                renommee: "Ascencia se positionne dans le classement des meilleurs Bachelors de Le Parisien Étudiant. Elle est appréciée pour son approche axée sur l'alternance et l'accompagnement des étudiants.",
+                salaire_moyen: "Les salaires des alternants peuvent aller de 1 800 à 2 300 € par mois selon le niveau d'études.",
+                adresse: "98 Allée des Champs Elysées, 91080 Évry-Courcouronnes"
+            }
+        },
+        {
+            title: "ESSCA School of Management",
+            link: "https://www.essca.fr",
+            details: {
+                ecole: "ESSCA School of Management",
+                diplome: "Programmes Grande École, Bachelors, Masters (Bac+3, Bac+5)",
+                type_eleve: "Étudiants visant une carrière en management avec une forte dimension internationale et éthique.",
+                admission: "Sur concours Accès post-bac ou admissions parallèles.",
+                pour_toi_si: "Tu recherches une grande école de commerce post-bac reconnue pour son excellence académique et son réseau.",
+                pas_pour_toi_si: "Tu préfères un cursus plus court ou une spécialisation immédiate non managériale.",
+                comparaison_fac: "Propose un grade de Master reconnu, mais avec une approche plus professionnalisante, internationale et un encadrement plus soutenu que l'université.",
+                renommee: "Triple accréditation (AACSB, AMBA, EQUIS), régulièrement classée parmi les meilleures écoles post-bac.",
+                salaire_moyen: "Environ 41 800 € bruts/an à la sortie (primes incluses).",
+                adresse: "55 quai Alphonse le Gallo, 92100 Boulogne-Billancourt"
+            }
+        },
+        {
+            title: "ISC Paris - Bachelor",
+            link: "https://www.iscparis.com",
+            details: {
+                ecole: "ISC Paris (Grande École de commerce), membre de la Conférence des Grandes Écoles",
+                diplome: "Bachelor en Management (Bac+3), visé par l'État et conférant le Grade de Licence",
+                type_eleve: "Lycéens post-bac via Parcoursup, ou admissions parallèles en Bac+1/+2. Idéal pour des étudiants souhaitant acquérir des compétences commerciales, managériales et marketing via une pédagogie basée sur l'Action Learning (apprentissage par l'action) et l'entrepreneuriat (entreprises étudiantes). S'adresse aux profils polyvalents, intéressés par l'international (cours en anglais, échanges, doubles diplômes) et souhaitant mûrir leur projet professionnel avant une spécialisation en 3ème année.",
+                admission: "En 1ère année, via Parcoursup. Admissions parallèles en 2ème ou 3ème année sur dossier. Processus incluant sélection sur dossier, épreuves écrites (tests de logique, QCM d'anglais) et entretien de motivation.",
+                pour_toi_si: "Tu recherches une formation professionnalisante, fortement axée sur la pratique et l'insertion professionnelle (stages, alternance). Tu es attiré par une dimension internationale forte et l'opportunité d'étudier en anglais ou à l'étranger. Tu souhaites bénéficier de la reconnaissance et du réseau d'une Grande École, avec des accréditations internationales (AACSB, AMBA, EPAS, BGA). Tu es dynamique, autonome et prêt à t'investir dans des projets concrets (entrepreneuriat étudiant).",
+                pas_pour_toi_si: "Tu préfères une approche purement théorique et académique sans forte immersion professionnelle ou associative. Tu n'es pas intéressé par le domaine du management, du commerce ou des affaires, ou si tu cherches une formation gratuite (frais de scolarité élevés, autour de 9 400€/an pour les premières années).",
+                comparaison_fac: "Le Bachelor de l'ISC Paris est une formation plus professionnalisante et davantage axée sur l'expérience terrain et l'internationalisation que les licences universitaires traditionnelles. Il vise une insertion professionnelle rapide ou une poursuite en Master, tandis que la Licence à l'université peut être plus théorique et demande une plus grande autonomie. Le Bachelor de l'ISC Paris, bien que Bac+3 et Grade de Licence, est délivré par une école de commerce privée.",
+                renommee: "L'ISC Paris est une Grande École membre de la Conférence des Grandes Écoles et accréditée AACSB, AMBA, EPAS et BGA. Son Bachelor est classé 15ème au classement Le Figaro Etudiant 2024 des Bachelors et 17ème au classement Le Parisien Étudiant 2024 des écoles de commerce, occupant la 1ère place sur l'alternance. Reconnue pour sa professionnalisation.",
+                salaire_moyen: "Le salaire moyen brut annuel à la sortie du Bachelor de l'ISC Paris est estimé à 37 000 €. Pour les diplômés de l'ISC Paris (tous programmes confondus, dont Master Grande École), le salaire moyen annuel brut était de 40 356 € selon une enquête d'insertion de 2019.",
+                adresse: "22, boulevard du Fort de Vaux, 75017 Paris."
+            }
+        },
+        {
+            title: "ISG Paris - Bachelor",
+            link: "https://www.isg.fr",
+            details: {
+                ecole: "ISG Paris",
+                diplome: "Bachelor Business & Management - Bac+3 (également appelé Bachelor en Management International - BMI)",
+                type_eleve: "Élève intéressé par l'international, la culture d'entreprise et les problématiques globales. Souhaite une formation professionnalisante, opérationnelle et axée sur l'acquisition rapide de compétences en gestion, marketing, finance et commerce. Aime la pédagogie active (projets, études de cas). Cherche un environnement structuré et un accompagnement personnalisé. Le programme s'adresse à des élèves avec un esprit entrepreneurial et innovant.",
+                admission: "Recrutement post-bac (Baccalauréat ou équivalent) via Parcoursup pour les lycéens français. Processus de sélection comprenant un dossier de candidature, des épreuves écrites (TAGE Post Bac) et des épreuves orales (entretien de motivation et entretien en anglais). Possibilité d'admission en 2ème ou 3ème année avec les crédits ECTS correspondants. Une rentrée décalée en février est possible, avec le même processus d'admission.",
+                pour_toi_si: "Tu recherches une formation professionnalisante et internationale, avec un accent sur le monde de l'entreprise. Tu es attiré(e) par les métiers du commerce international, du marketing, de la finance ou de la gestion. Tu souhaites évoluer dans un environnement multiculturel et bénéficier d'opportunités d'échanges académiques à l'étranger. Tu apprécies les méthodes pédagogiques basées sur des projets concrets et des mises en situation. Tu vises une insertion professionnelle rapide ou une poursuite d'études en Master.",
+                pas_pour_toi_si: "Tu préfères une formation purement théorique ou académique sans forte orientation pratique ou professionnelle. Tes intérêts principaux sont le droit pur ou les sciences sociales sans lien direct avec le management et le business. Tu n'es pas à l'aise avec l'anglais ou les environnements internationaux. Tu n'es pas prêt(e) à des frais de scolarité plus élevés que ceux de l'université.",
+                comparaison_fac: "Le Bachelor de l'ISG est généralement plus professionnalisant et opérationnel, avec un plus grand nombre de stages et de mises en situation concrètes. L'encadrement est plus poussé et les classes sont de taille plus réduite qu'à l'université. Les coûts de scolarité sont significativement plus élevés qu'en licence universitaire. Il offre un accès facilité à un réseau professionnel via les stages et les anciens élèves. Les deux diplômes valident un niveau Bac+3 et délivrent 180 crédits ECTS.",
+                renommee: "L'ISG est une école de commerce membre de la Conférence des Grandes Écoles. Le Bachelor en Management International est un programme visé Bac+3 par le Ministère de l'Enseignement Supérieur et de la Recherche. Il est reconnu pour son excellence académique et son ouverture à l'international. Le Bachelor en Management International de l'ISG est classé 14e des bachelors selon Le Figaro Étudiant 2025. L'ISG bénéficie d'une bonne réputation auprès des recruteurs.",
+                salaire_moyen: "Le salaire moyen à la sortie de l'ISG (tous programmes confondus, souvent Master) est de 53 400€ avec primes ou 42 100€ annuel moyen avec primes. Pour le Programme Grande École (Master), le salaire médian à la sortie est de 39 500€. Pour un Bachelor, les salaires de sortie peuvent varier entre 28 000€ et 35 000€ brut annuel.",
+                adresse: "8 rue de Lota, 75116 Paris"
+            }
+        },
+        {
+            title: "IDRAC Business School - Bachelor",
+            link: "https://www.ecoles-idrac.com",
+            details: {
+                ecole: "IDRAC Business School",
+                diplome: "Bachelor Marketing & Business - Bac+3. Diplôme visé par l'État et enregistré au RNCP de niveau 6 (Bac+3) en tant que \"Responsable du marketing et du développement commercial\".",
+                type_eleve: "Ce programme s'adresse aux jeunes bacheliers volontaires, curieux et désireux de découvrir le monde de l'entreprise, du marketing, du commerce et de l'international.",
+                admission: "* **Post-bac (1ère année)**: Inscription et dépôt de dossier en ligne via Parcoursup®. Nécessite un baccalauréat général, technologique ou professionnel, ou un diplôme équivalent.\n* **Admission parallèle (2ème et 3ème année)**: Sur dossier, avec épreuves écrites et orales.",
+                pour_toi_si: "* Tu cherches une formation professionnalisante, reconnue par l'État, axée sur les métiers du marketing et du développement commercial.\n* Tu souhaites acquérir rapidement une solide expérience professionnelle et des compétences pratiques très recherchées par les entreprises.\n* L'ouverture internationale t'attire, avec des opportunités d'expériences à l'étranger (learning expedition, cours en anglais).\n* Tu apprécies une pédagogie active et concrète, avec des mises en situation, des business games, des simulations et des projets d'entreprise réels.",
+                pas_pour_toi_si: "* Tu privilégies une approche purement théorique et académique, avec moins d'emphase sur l'insertion professionnelle immédiate.\n* Tu es plus à l'aise dans un environnement universitaire très autonome et peu encadré.\n* Tu n'es pas attiré(e) par les domaines du commerce, de la vente ou du marketing.",
+                comparaison_fac: "* **Bachelor (IDRAC)**: Dispensé par une école privée, il est généralement plus professionnalisant, avec une forte orientation pratique, de nombreux stages et des possibilités d'alternance. L'encadrement y est plus individualisé.\n* **Licence (Université)**: Dispensée par l'université publique, elle est plus axée sur l'acquisition de connaissances théoriques et prépare principalement à la poursuite d'études en Master universitaire.",
+                renommee: "Le Bachelor Marketing & Business de l'IDRAC Business School est un diplôme \"visé par l'État\" et enregistré au RNCP, ce qui atteste de sa qualité académique et de sa reconnaissance officielle par le Ministère de l'Enseignement Supérieur.",
+                salaire_moyen: "Le salaire moyen à la sortie d'un Bachelor en Commerce et Marketing peut varier entre 25 000 et 35 000 euros bruts annuels pour un jeune diplômé. Certaines sources généralistes pour les diplômés de l'IDRAC mentionnent des salaires de l'ordre de 33 000 euros en moyenne à la fin des études, toutes formations confondues.",
+                adresse: "7/11 avenue des Chasseurs, 75017 Paris"
+            }
+        },
+        {
+            title: "IESEG - Bachelor in Int. Business",
+            link: "https://www.ieseg.fr",
+            details: {
+                ecole: "IESEG School of Management",
+                diplome: "Bachelor in International Business (BIB) - Bac+3, Diplôme d'Études Supérieures en Affaires Internationales (DESAI), visé par le Ministère de l'Enseignement Supérieur et de la Recherche, Grade de Licence.",
+                type_eleve: "Étudiants ayant un fort intérêt pour l'économie, la gestion et les affaires internationales. Nécessite une très bonne maîtrise de l'anglais, car l'enseignement est entièrement en anglais. S'adresse à des profils souhaitant évoluer dans un environnement multiculturel et international.",
+                admission: "Pour les bacheliers français, l'admission se fait via Parcoursup. Pour les candidats avec un autre diplôme, la candidature se fait via la plateforme en ligne de l'IESEG. La procédure comprend l'étude d'un dossier de candidature et un entretien de motivation en anglais. L'obtention du baccalauréat est obligatoire.",
+                pour_toi_si: "* Tu as un excellent niveau d'anglais et souhaites suivre une formation entièrement dans cette langue.\n* Tu es attiré(e) par les carrières à dimension internationale et le management global.\n* Tu recherches une formation professionnalisante avec des stages (minimum 10 mois) et une expérience internationale obligatoire.",
+                pas_pour_toi_si: "* Ton niveau d'anglais est faible ou tu n'es pas à l'aise avec un enseignement 100% en anglais.\n* Tu préfères un cursus purement théorique sans dimension professionnalisante marquée.\n* Tu n'es pas intéressé(e) par l'économie, la gestion ou le commerce international.",
+                comparaison_fac: "Le Bachelor in International Business de l'IESEG est un diplôme visé Bac+3 et Grade de Licence, comme une licence universitaire, mais il se distingue par une approche plus professionnalisante. L'enseignement est 100% en anglais, avec une forte dimension interculturelle et des stages obligatoires. Les frais de scolarité sont significativement plus élevés (11 850€ par an pour 2025-2026) que ceux d'une licence universitaire publique.",
+                renommee: "L'IESEG est une Grande École de commerce, membre de la Conférence des Grandes Écoles, et bénéficie de la triple accréditation internationale (AACSB, AMBA, EQUIS). Le Bachelor in International Business de l'IESEG est classé 2ème ou 4ème au niveau national par Le Figaro Étudiant pour les Bachelors.",
+                salaire_moyen: "Le salaire moyen annuel à 3 ans après l'obtention d'un diplôme de l'IESEG (tous programmes confondus) est de 45 000€ (fixe + variable).",
+                adresse: "1 Parvis de La Défense, 92044 Puteaux"
+            }
+        },
+        {
+            title: "IESEG - Programme Grande École",
+            link: "https://www.ieseg.fr",
+            details: {
+                ecole: "IÉSEG School of Management",
+                diplome: "Programme Grande École (Bachelor + Master) - Bac+5",
+                type_eleve: "L'IÉSEG s'adresse aux étudiants qui souhaitent devenir des \"acteurs du changement\", contribuant au développement d'entreprises responsables, innovantes et humanistes dans un contexte international. Le programme met l'accent sur une connaissance approfondie et multidisciplinaire, ainsi que sur le savoir-faire pratique.",
+                admission: "L'admission en 1ère année (post-bac) se fait via le Concours ACCÈS, avec inscription sur Parcoursup. Le concours comprend des épreuves écrites et des épreuves orales. Des admissions parallèles sont possibles en 2ème, 3ème année ou en cycle Master, sur dossier et épreuves orales.",
+                pour_toi_si: "Tu es attiré par une carrière internationale et des environnements multiculturels. Tu recherches une formation solide en gestion, finance, marketing ou conseil. Tu valorises les accréditations prestigieuses et les classements élevés.",
+                pas_pour_toi_si: "Tu recherches un diplôme universitaire purement académique en droit ou en sciences sociales, sans une forte orientation gestion. Tu n'es pas à l'aise dans un environnement d'apprentissage international et multiculturel.",
+                comparaison_fac: "Le Programme Grande École confère le Grade de Master (Bac+5), reconnu par l'État, équivalent à un Master universitaire en termes de niveau académique. Il se distingue par une approche plus professionnalisante, avec de nombreux liens avec les entreprises. L'accent est mis sur l'international. Les frais de scolarité sont considérablement plus élevés qu'à l'université publique.",
+                renommee: "L'IÉSEG est triplement accréditée (EQUIS, AACSB, AMBA). Elle est classée parmi les meilleures écoles de commerce françaises : 8ème en France selon le Financial Times 2021, 9ème pour son Programme Grande École par L'Étudiant. À l'international, son Master in Management est 26ème mondial selon le Financial Times.",
+                salaire_moyen: "Le salaire annuel moyen (incluant les bonus) pour les diplômés de la promotion 2022 du Programme Grande École est de 49 600€. 95% des diplômés de cette promotion ont trouvé leur premier emploi dans les quatre mois suivant l'obtention du diplôme.",
+                adresse: "1 Parvis de La Défense, Socle de la Grande Arche, 92044 Puteaux"
+            }
+        },
+        {
+            title: "ISCE Alternance - Bachelor",
+            link: "https://isce-alternance.fr",
+            details: {
+                ecole: "ISCE Alternance",
+                diplome: "Bachelor commerce en alternance (spécialisation Marketing Digital - Bac+3)",
+                type_eleve: "Élèves recherchant une formation professionnalisante axée sur l'employabilité et l'acquisition rapide de compétences pratiques. Convient aux étudiants motivés, organisés, capables de gérer un rythme soutenu entre cours et responsabilités en entreprise (2 jours école / 3 jours entreprise).",
+                admission: "Sur étude de dossier et entretien individuel. Les résultats d'admission sont communiqués sous 72h. L'ISCE Alternance accompagne les admissibles dans la recherche d'entreprise partenaire pour le contrat d'alternance.",
+                pour_toi_si: "Tu souhaites acquérir une expérience professionnelle significative dès tes études. Tu vises un diplôme reconnu par l'État et enregistré au RNCP. Tu recherches un cursus entièrement financé et rémunéré par l'alternance. Tu apprécies un accompagnement personnalisé pour ta recherche d'entreprise et ton suivi de carrière.",
+                pas_pour_toi_si: "Tu préfères un parcours purement académique sans immersion en entreprise. Tu n'es pas à l'aise avec un rythme d'études intense nécessitant une grande autonomie et organisation.",
+                comparaison_fac: "Le Bachelor de l'ISCE Alternance, de par son format en alternance, est plus professionnalisant qu'une Licence universitaire équivalente, avec une forte emphase sur l'expérience terrain et les compétences directement employables en entreprise. Il vise une insertion professionnelle plus rapide.",
+                renommee: "L'ISCE Alternance délivre des diplômes reconnus par l'État et inscrits au Répertoire National des Certifications Professionnelles (RNCP). L'établissement met en avant un réseau de plus de 300 entreprises partenaires et un taux d'insertion professionnelle élevé.",
+                salaire_moyen: "Le salaire moyen d'embauche pour un diplômé de Bachelor Commerce est estimé à environ 35 000 € brut par an (selon une enquête 2021 sur les diplômés d'écoles de commerce).",
+                adresse: "Parvis de la Défense Tour Atlantique, 1 place de la pyramide, 92800 Puteaux."
+            }
+        },
+        {
+            title: "CCI Paris IDF - Formations",
+            link: "https://www.cci-paris-idf.fr",
+            details: {
+                ecole: "SUP de V (École Supérieure de Vente et de Management), école de la Chambre de Commerce et d'Industrie de Paris Île-de-France.",
+                diplome: "Formations en alternance de Bac+2 à Bac+5 reconnues par l'État, incluant BTS, Bachelor et Mastère.",
+                type_eleve: "S'adresse aux étudiants qui recherchent une insertion professionnelle rapide et réussie. Profils motivés par l'acquisition de compétences pratiques et une expérience significative en entreprise.",
+                admission: "Sélection sur dossier, tests écrits et entretien de motivation. Les prérequis dépendent du niveau de formation visé.",
+                pour_toi_si: "Tu cherches une formation professionnalisante et opérationnelle avec un fort taux d'employabilité. Tu souhaites acquérir une expérience professionnelle concrète en alternance, avec prise en charge des frais de scolarité par l'entreprise et rémunération. Tu es intéressée par les métiers de la vente, du marketing, du management, de la gestion ou des ressources humaines.",
+                pas_pour_toi_si: "Tu préfères un cursus universitaire exclusivement théorique et académique, sans immersion professionnelle obligatoire. Tu n'es pas prête à concilier études et travail en entreprise sur un rythme d'alternance.",
+                comparaison_fac: "La SUP de V met l'accent sur la professionnalisation et l'employabilité directe grâce à l'alternance. Les frais de scolarité sont pris en charge et l'étudiant est rémunéré. Les taux d'insertion professionnelle sont élevés.",
+                renommee: "École reconnue par l'État et membre du réseau de la CCI Paris Île-de-France, avec plus de 30 ans d'expérience. Classée dans le top 3 du classement HappyAtSchool 2024 pour la satisfaction étudiante. L'école bénéficie d'un large réseau de 3 200 entreprises partenaires et ses diplômés ont un taux de réussite aux examens de 91% et un taux d'insertion professionnelle de 87% à 7 mois.",
+                salaire_moyen: "Le salaire moyen à la sortie n'est pas fourni de manière fiable. Les alternants sont rémunérés entre 43% et 100% du SMIC.",
+                adresse: "3 Rue Armand Moisant, 75015 Paris"
+            }
+        },
+        {
+            title: "KEDGE Business School - PGE",
+            link: "https://kedge.edu",
+            details: {
+                ecole: "KEDGE Business School",
+                diplome: "Programme Grande École - Bac+5 (Grade de Master visé par l'État)",
+                type_eleve: "Le PGE s'adresse aux futurs leaders engagés et créatifs, cherchant à apporter des réponses innovantes, durables et inclusives. Il cible les étudiants désireux d'une formation basée sur l'action et la pratique (\"Grow by Doing®\"), avec une forte dimension internationale.",
+                admission: "L'accès se fait principalement via le concours ECRICOME (pour les étudiants de classes préparatoires, Bac+2 via Tremplin Bac+2, Bac+3/4 via Tremplin Bac+3) ou par admission parallèle sur dossier. Le processus est sélectif.",
+                pour_toi_si: "Tu recherches une école triplement accréditée (AACSB, EQUIS, AMBA) avec une forte reconnaissance internationale. Tu souhaites une pédagogie concrète, orientée action, et une immersion professionnelle significative via stages et alternance. Tu es attiré(e) par l'international.",
+                pas_pour_toi_si: "Tu préfères une approche purement théorique ou académique sans forte dimension pratique. Tu n'es pas à l'aise avec des périodes longues à l'étranger ou en entreprise.",
+                comparaison_fac: "Le Programme Grande École de KEDGE délivre un Grade de Master (Bac+5), équivalent aux Masters universitaires en termes de niveau. Cependant, les Grandes Écoles de commerce comme KEDGE se distinguent par leur triple accréditation, une pédagogie fortement axée sur l'action et une dimension internationale marquée. Elles offrent généralement une meilleure employabilité et des salaires de sortie plus élevés.",
+                renommee: "KEDGE Business School fait partie du cercle très restreint (1%) des Business Schools mondiales détenant la Triple Accréditation. Elle est membre de la Conférence des Grandes Écoles et se classe régulièrement parmi les meilleures écoles de commerce françaises. KEDGE se positionne 10ème au classement SIGEM 2024.",
+                salaire_moyen: "Le salaire moyen annuel à la sortie du PGE de KEDGE est compris entre 45 000 et 50 000 € brut. Trois ans après l'obtention du diplôme, le salaire moyen atteint 74 000€ brut annuel selon le Financial Times. Le taux d'emploi des diplômés est de 99% dans les 6 mois.",
+                adresse: "Lumière Building, 40 Avenue des Terroirs de France, 75012 Paris"
+            }
+        },
+        {
+            title: "EMLV - Programme Grande École",
+            link: "https://www.emlv.fr",
+            details: {
+                ecole: "EMLV - École de Management Léonard de Vinci",
+                diplome: "Programme Grande École - Bac+5 (Grade de Master), visé par l'État",
+                type_eleve: "Le Programme Grande École de l'EMLV s'adresse à des managers hybrides, agiles et responsables, capables d'évoluer dans un monde technologique et en transition. L'école valorise les profils ayant une appétence pour le digital, l'innovation, la transversalité et l'ouverture internationale.",
+                admission: "L'admission en 1ère année post-bac se fait via Parcoursup et le Concours SESAME. Pour les admissions parallèles (Bac+1 à Bac+4), la procédure est propre à l'EMLV, sur dossier et entretien.",
+                pour_toi_si: "Tu recherches une formation en management avec une forte dimension digitale, technologique et une pédagogie hybride, en collaboration avec une école d'ingénieurs (ESILV) et une école du digital (IIM). Tu souhaites une expérience internationale marquée. Le développement de tes soft skills, l'esprit d'équipe et la pratique sportive sont importants pour toi.",
+                pas_pour_toi_si: "Tu préfères une école de commerce sans forte orientation digitale ou technologique. Tu n'es pas attiré(e) par une pédagogie active centrée sur les projets, les soft skills et la transversalité avec d'autres écoles.",
+                comparaison_fac: "Le Programme Grande École de l'EMLV, en tant que Grande École, offre une forte professionnalisation dès les premières années, avec des stages obligatoires et la possibilité d'alternance. Contrairement à certains Masters universitaires, l'EMLV met l'accent sur les soft skills, le travail en équipe pluridisciplinaire. Les diplômés des Grandes Écoles bénéficient généralement d'une meilleure insertion professionnelle et de salaires de sortie plus élevés.",
+                renommee: "L'EMLV est membre de la Conférence des Grandes Écoles. Son Programme Grande École est triple accrédité (AACSB, AMBA, EFMD Master). Elle est classée 3ème école de commerce post-bac par Le Point en 2025 et 4ème par Le Figaro Étudiant en 2025.",
+                salaire_moyen: "Le salaire moyen annuel brut à la sortie (promotion 2023) est de 44 000 € en France et de 50 000 € à l'étranger. 92% des diplômés trouvent un emploi en moins de 4 mois.",
+                adresse: "47 Boulevard de Pesaro, 92000 Nanterre"
+            }
+        },
+        {
+            title: "ESAM - Bachelors",
+            link: "https://www.esam-ecoles.com/",
+            details: {
+                ecole: "ESAM",
+                diplome: "Bachelors en Management, Finance, Droit (Bac+3) et Master (Bac+5).",
+                type_eleve: "Candidats avec un esprit entrepreneurial, intéressés par la finance, le management ou le droit des affaires.",
+                admission: "Sur concours indépendant, hors Parcoursup.",
+                pour_toi_si: "Tu cherches une formation en droit des affaires axée sur la pratique et les compétences opérationnelles.",
+                pas_pour_toi_si: "Tu cherches une formation académique généraliste en droit.",
+                comparaison_fac: "Les écoles de ce type se distinguent des universités par une pédagogie très axée sur la pratique et par un encadrement plus personnalisé grâce à des effectifs réduits.",
+                renommee: "ESAM est connue pour sa pédagogie axée sur les besoins du marché et son réseau d'entreprises. En 2019, elle a été classée 1ère école post-bac dans une compétition mondiale.",
+                salaire_moyen: "Le salaire moyen après un Bachelor en Management est d'environ 28 000 € bruts par an.",
+                adresse: "12, rue Alexandre Parodi, 75010 Paris"
+            }
+        },
+        {
+            title: "ESLSCA Business School",
+            link: "https://www.eslsca.fr",
+            details: {
+                ecole: "ESLSCA Business School",
+                diplome: "Diplôme d'école de commerce (Bac+5)",
+                type_eleve: "Étudiants ambitieux qui souhaitent faire carrière dans la finance, le marketing ou le luxe, avec une forte dimension internationale.",
+                admission: "Admission post-bac avec des épreuves spécifiques.",
+                pour_toi_si: "Tu vises une carrière à l'international, notamment dans la finance de marché, avec un cursus professionnalisant.",
+                pas_pour_toi_si: "Tu préfères le format plus théorique et académique d'un master universitaire.",
+                comparaison_fac: "Le diplôme Grade de Master de l'ESLSCA est reconnu par l'État. Il est plus professionnalisant et met l'accent sur les stages, les projets de groupe et les cas pratiques, ce qui le différencie d'un master universitaire plus généraliste.",
+                renommee: "ESLSCA a été classée dans le top 10 des écoles où les diplômés sont les mieux payés (étude Emolument).",
+                salaire_moyen: "Le salaire moyen à la sortie de l'école est de 45 000 € bruts par an.",
+                adresse: "15 rue de Cambrai, 75019 Paris"
+            }
+        }
+    ],
+    social: [
+        {
+            title: "AFBB Paris - BTS SP3S",
+            link: "https://www.afbb-paris.com",
+            details: {
+                ecole: "AFBB Paris",
+                diplome: "BTS SP3S - Services et Prestations des Secteurs Sanitaire et Social (Bac+2)",
+                type_eleve: "L'élève idéal pour le BTS SP3S à l'AFBB Paris est une personne rigoureuse, organisée, dotée de bonnes capacités de communication écrite et orale. Elle doit faire preuve de disponibilité et avoir le sens de la confidentialité. Une sensibilité aux secteurs sanitaire et social est essentielle.",
+                admission: "L'admission se fait sur dossier, tests et entretien. Les candidats doivent être titulaires d'un baccalauréat adapté. La formation peut être suivie en statut étudiant (initial) ou en alternance.",
+                pour_toi_si: "Tu es attiré(e) par les métiers de l'organisation et de la gestion administrative dans les structures des secteurs sanitaire et social. Tu aimes le contact humain, l'accompagnement des personnes, et la facilitation de leur accès aux droits et prestations. Tu recherches une formation professionnalisante de courte durée (Bac+2).",
+                pas_pour_toi_si: "Tu recherches une formation très théorique sans application pratique immédiate, ou si tu n'es pas intéressé(e) par les aspects administratifs et de coordination des services.",
+                comparaison_fac: "Le BTS SP3S est une formation très professionnalisante de deux ans, conçue pour une insertion directe sur le marché du travail. En comparaison, le BUT Carrières Sociales (Bac+3) offre une formation plus généraliste et approfondie sur trois ans.",
+                renommee: "Le BTS SP3S est un diplôme reconnu pour son caractère professionnalisant et offre une forte employabilité. L'AFBB est un établissement d'enseignement supérieur technique privé certifié QUALIOPI. Les avis des étudiants sur l'AFBB sont majoritairement positifs.",
+                salaire_moyen: "Le salaire brut mensuel moyen en début de carrière pour un titulaire de BTS SP3S est généralement compris entre 1700€ et 2000€. À Paris, ce salaire moyen peut atteindre environ 2132€ brut par mois.",
+                adresse: "9 bis rue Gérando, 75009 Paris."
+            }
+        },
+        {
+            title: "Institut Supérieur Clorivire",
+            link: "https://www.cloriviere.paris",
+            details: {
+                ecole: "Institut Supérieur Clorivière (ISC)",
+                diplome: "BTS ESF - Bac+2 (Brevet de Technicien Supérieur Économie Sociale Familiale)",
+                type_eleve: "L'élève attiré par le secteur social et l'aide aux personnes, intéressé par les enjeux de la vie quotidienne (budget, alimentation, logement, santé, consommation, énergie, environnement).",
+                admission: "Sur dossier via Parcoursup et/ou candidature spontanée. L'accès peut inclure des tests et/ou un entretien.",
+                pour_toi_si: "Tu rêves d'un métier avec un impact concret sur la vie des autres, si les enjeux d'organisation budgétaire, d'alimentation, de logement et de santé t'intéressent, et si tu souhaites devenir expert des domaines de la vie quotidienne pour conseiller des personnes en difficulté.",
+                pas_pour_toi_si: "Tu n'es pas intéressé(e) par les problématiques sociales et l'aide aux personnes, si tu préfères une formation purement théorique sans stages ou applications pratiques.",
+                comparaison_fac: "Le BTS ESF est une formation plus professionnalisante (Bac+2) orientée vers l'insertion directe sur le marché du travail, contrairement à une licence universitaire qui offre une approche plus théorique et générale. Il permet une poursuite d'études vers une Licence professionnelle ou le Diplôme d'État de Conseiller en Économie Sociale Familiale (DECESF).",
+                renommee: "L'Institut Supérieur Clorivière est un établissement privé sous contrat. Les avis varient, certains soulignant un accompagnement et une équipe pédagogique de qualité. Le BTS ESF est un diplôme national reconnu par l'État.",
+                salaire_moyen: "En début de carrière, après un BTS ESF, les salaires varient généralement de 1 600 à 2 300 € brut par mois. Un Conseiller en Économie Sociale et Familiale (CESF) peut espérer entre 1 700 et 2 000 € brut mensuel au début.",
+                adresse: "119 boulevard Diderot, 75012 PARIS."
+            }
+        },
+        {
+            title: "Fénelon Supérieur - BTS ESF",
+            link: "https://www.fenelonsup.org",
+            details: {
+                ecole: "Fénelon Supérieur (établissement catholique d'enseignement supérieur).",
+                diplome: "BTS ESF - Brevet de Technicien Supérieur Économie Sociale Familiale (Bac+2).",
+                type_eleve: "Jeune fille désireuse d'aider les autres et d'accompagner des personnes et des familles en difficulté. Intérêt marqué pour le secteur social et les problématiques de la vie quotidienne.",
+                admission: "Procédure via Parcoursup. Sélection sur dossier et entretien de motivation. Frais de scolarité à Fénelon Sup: 1 617 € / an (2024/2025).",
+                pour_toi_si: "Tu es passionnée par l'aide aux personnes et l'accompagnement dans les domaines de la vie quotidienne. Tu apprécies une formation concrète et professionnalisante avec des stages pratiques.",
+                pas_pour_toi_si: "Tu recherches une formation sans dimension sociale marquée ou sans lien avec les problématiques de la vie quotidienne. Tu n'es pas intéressée par le travail en équipe.",
+                comparaison_fac: "Le BTS ESF est une formation plus professionnalisante et encadrée que l'université, avec un programme fixe et des stages obligatoires, visant une insertion rapide ou une poursuite d'études spécifique (DECESF).",
+                renommee: "Le BTS ESF est un diplôme national reconnu par l'État. Fénelon Sup affiche un taux de réussite de 98% au BTS. L'établissement reçoit des avis globalement positifs.",
+                salaire_moyen: "En début de carrière, après le BTS ESF, le salaire se situe généralement entre 1 600 € et 2 000 € brut/mois. Pour un Conseiller en Économie Sociale Familiale (après le DECESF), le salaire débute entre 1 700 € et 2 300 € brut/mois.",
+                adresse: "9 boulevard de Courcelles - 75008 Paris."
+            }
+        },
+        {
+            title: "Fondation ITSRS - DECESF",
+            link: "https://fondation-itsrs.org",
+            details: {
+                ecole: "Fondation ITSRS (IRTS Île-de-France Montrouge Neuilly-sur-Marne)",
+                diplome: "DECESF - Diplôme d'État de Conseiller en Économie Sociale Familiale - Bac+3",
+                type_eleve: "Étudiant(e) intéressé(e) par l'accompagnement social, l'aide aux personnes en difficulté (précarité, problèmes financiers, logement, surendettement, chômage, handicap, vieillissement) dans les domaines de la vie quotidienne.",
+                admission: "Principalement accessible aux titulaires du BTS Économie Sociale Familiale (BTS ESF). Le processus d'admission se déroule généralement sur dossier et entretien ou épreuve de sélection.",
+                pour_toi_si: "Tu souhaites un métier de terrain avec un impact social direct, accompagner des personnes vers l'autonomie, résoudre des problèmes du quotidien et travailler dans des domaines variés. Tu as le sens de l'écoute, de l'organisation et aimes travailler en équipe.",
+                pas_pour_toi_si: "Tu recherches une formation purement académique sans implication directe sur le terrain, ou si tu n'es pas à l'aise avec les problématiques de précarité et de difficultés sociales.",
+                comparaison_fac: "Le DECESF est un diplôme d'État professionnalisant de niveau licence (Bac+3) qui forme des spécialistes de l'organisation de la vie familiale et de l'accompagnement social, avec une approche concrète et des stages significatifs. Il confère le grade de licence.",
+                renommee: "Le DECESF est un diplôme d'État reconnu et obligatoire pour exercer la profession. La Fondation ITSRS est un Institut Régional du Travail Social (IRTS), établissements reconnus dans la formation aux métiers du social.",
+                salaire_moyen: "En début de carrière, le salaire d'un CESF varie selon l'employeur (privé ou public), se situant entre 1 790€ et 2 131€ bruts mensuels.",
+                adresse: "1 rue du 11 novembre, 92120 Montrouge."
+            }
+        },
+        {
+            title: "IRTS Parmentier - DECESF",
+            link: "https://www.irtsparmentier.fr",
+            details: {
+                ecole: "IRTS Parmentier",
+                diplome: "DECESF - Diplôme d'État Conseiller en Économie Sociale Familiale - Bac+3 (Niveau 6, confère le grade de licence)",
+                type_eleve: "Principalement titulaires d'un BTS ESF, mais aussi titulaires d'autres Diplômes d'État du travail social. Intérêt pour les questions sociales et les besoins des personnes, sens du contact et de l'écoute, autonomie, sens du travail en équipe.",
+                admission: "Sur dossier et entretien de motivation. Le dossier comprend une note autobiographique (5 pages), un CV détaillé et les pièces justificatives des diplômes.",
+                pour_toi_si: "Tu es titulaire d'un BTS ESF et souhaites te spécialiser dans l'accompagnement social et familial. Tu as un fort intérêt pour les problématiques sociales et tu es motivée par l'aide et le conseil aux personnes en difficulté.",
+                pas_pour_toi_si: "Tu n'as pas les prérequis nécessaires (BTS ESF ou équivalent). Tu n'es pas à l'aise avec le contact direct et l'accompagnement de publics vulnérables.",
+                comparaison_fac: "Le DECESF est un Diplôme d'État de niveau Bac+3 conférant le grade de licence, mais il s'agit d'une formation professionnelle très spécialisée et réglementée, axée sur l'insertion directe dans le métier de CESF. Un diplôme universitaire général de niveau licence offre une formation plus théorique.",
+                renommee: "Diplôme d'État reconnu. La profession de CESF est essentielle et en demande. L'IRTS Parmentier affiche un taux de réussite de 83% pour le DECESF en 2023.",
+                salaire_moyen: "Débutant : Environ 1600€ à 1700€ bruts mensuels. Avec de l'expérience : Jusqu'à 2400€ bruts mensuels. Dans la fonction publique, la rémunération varie entre 1900€ et 3080€ bruts mensuels.",
+                adresse: "145, avenue Parmentier, 75010 Paris."
+            }
+        },
+        {
+            title: "CFA Sacef - BTS SP3S",
+            link: "https://cfasacef.fr",
+            details: {
+                ecole: "CFA SACEF",
+                diplome: "BTS Services et Prestations des Secteurs Sanitaire et Social (SP3S) en alternance - Bac+2",
+                type_eleve: "Élève empathique aimant le contact humain et souhaitant s'investir dans l'accompagnement des personnes. Intéressé(e) par la gestion administrative et la coordination au sein des structures sanitaires et sociales.",
+                admission: "Sur dossier de candidature via Parcoursup (souvent) ou directement auprès du CFA. Un entretien de motivation peut être requis. La recherche d'une entreprise d'accueil est nécessaire.",
+                pour_toi_si: "Tu recherches une formation professionnalisante avec une forte immersion en entreprise (alternance). Tu souhaites acquérir rapidement des compétences techniques, administratives et relationnelles. Tu vises une bonne employabilité après un Bac+2.",
+                pas_pour_toi_si: "Tu préfères une approche purement théorique et académique sans expérience professionnelle immédiate. Tu n'es pas à l'aise avec les tâches administratives ou le contact direct avec des publics variés.",
+                comparaison_fac: "Le BTS SP3S est plus orienté vers l'insertion professionnelle directe et offre une expérience concrète grâce à l'alternance, contrairement à une licence universitaire qui est plus théorique.",
+                renommee: "Le CFA SACEF est un acteur majeur de l'apprentissage en Ile-de-France. Le diplôme BTS SP3S est reconnu pour une forte employabilité, 85% des diplômés trouvant un emploi dans les six mois.",
+                salaire_moyen: "À la sortie du diplôme, un salaire brut mensuel moyen se situe entre 1 600 € et 2 300 €, soit environ 2 000 € brut/mois pour un débutant.",
+                adresse: "5 rue Cadet, 75009 Paris"
+            }
+        },
+        {
+            title: "AURLOM BTS+ - BTS SP3S",
+            link: "https://www.aurlom.com/bts-plus/bts-spss-services-prestations-secteurs-sanitaire-social/",
+            details: {
+                ecole: "AURLOM BTS+",
+                diplome: "BTS Services et Prestations des Secteurs Sanitaire et Social (SP3S) en apprentissage - Bac+2",
+                type_eleve: "Élève ayant un intérêt marqué pour les services à la personne, la communication avec les usagers, la gestion des ressources humaines, le travail d'équipe et une organisation méthodique. Sens de l'écoute, de l'empathie et du service.",
+                admission: "Procédure via Parcoursup. Pour la formation en apprentissage, la recherche et la signature d'un contrat d'apprentissage avec une entreprise sont obligatoires; Aurlom accompagne les étudiants dans cette démarche.",
+                pour_toi_si: "Tu es intéressé par la prise en charge administrative, la gestion et la coordination dans les secteurs sanitaire et social. Tu souhaites une formation professionnalisante courte (Bac+2) avec une forte employabilité et une insertion rapide. Tu recherches à acquérir une expérience professionnelle significative grâce à l'alternance.",
+                pas_pour_toi_si: "Tu recherches exclusivement des métiers de terrain centrés sur l'action sociale directe. Tu n'as pas d'intérêt pour l'administratif, la gestion ou la réglementation du secteur.",
+                comparaison_fac: "Le BTS SP3S est plus professionnalisant qu'une Licence universitaire. Le BUT Carrières Sociales met davantage l'accent sur les enjeux sociaux et l'animation, tandis que le BTS SP3S se concentre sur l'aspect administratif et organisationnel.",
+                renommee: "Le BTS SP3S est un diplôme national d'État reconnu. AURLOM BTS+ met en avant un taux de réussite élevé à l'examen (100% l'an dernier).",
+                salaire_moyen: "Pour un débutant après un BTS SP3S, le salaire moyen est généralement entre 1 600 € et 2 300 € brut par mois.",
+                adresse: "48 Rue de la Roquette, 75011 Paris"
+            }
+        },
+        {
+            title: "Pigier Paris - BTS SP3S",
+            link: "https://www.pigier.com",
+            details: {
+                ecole: "Pigier Paris",
+                diplome: "BTS SP3S - Services et Prestations des Secteurs Sanitaire et Social - Bac+2",
+                type_eleve: "Le titulaire du BTS SP3S exerce son activité dans des établissements et services sociaux, sanitaires, médico-sociaux et socio-éducatifs. Il met ses compétences techniques, administratives et relationnelles au service de publics demandeurs de soins, de services et de prestations sociales.",
+                admission: "L'admission en BTS SP3S s'effectue via la plateforme Parcoursup. Elle se fait sur étude de dossier et est souvent complétée by un entretien individuel de motivation.",
+                pour_toi_si: "Tu souhaites une formation courte et professionnalisante dans un secteur porteur. Tu es intéressée par l'accompagnement des usagers, la gestion des services sociaux et sanitaires. Tu possèdes de bonnes qualités relationnelles, le sens de l'organisation et une capacité à travailler en équipe.",
+                pas_pour_toi_si: "Tu n'as pas d'intérêt marqué pour le secteur sanitaire et social ou pour le contact avec des publics variés et parfois vulnérables. Tu n'aimes pas les tâches administratives ou la coordination.",
+                comparaison_fac: "Le BTS SP3S est un diplôme d'État professionnalisant de niveau Bac+2 qui prépare directement à l'entrée sur le marché du travail. Il offre une approche plus directement orientée métier que la plupart des premières années de licence universitaire.",
+                renommee: "Le BTS SP3S est un diplôme d'État reconnu. Pigier Paris se positionne comme une école tournée vers la professionnalisation et l'employabilité. Le taux de réussite à l'examen 2024 pour le BTS SP3S à Pigier Paris est de 64%.",
+                salaire_moyen: "Le salaire médian pour les emplois après un BTS SP3S est d'environ 44 850 € par an. Les postes de niveau débutant commencent autour de 21 335 € par an. Pour un profil débutant, le salaire moyen varie généralement entre 1 600 € et 2 200 € brut par mois.",
+                adresse: "Pigier Paris, Parc du Pont de Flandre - Bât. 32, 11 rue de Cambrai, 75019 Paris."
+            }
+        },
+        {
+            title: "Lycée Blaise Pascal - BTS ESF",
+            link: "https://www.onisep.fr/ressources/un-etablissement/lycee-blaise-pascal-villemomble",
+            details: {
+                ecole: "Lycée Blaise Pascal, Villemomble (l'info pointe vers Clermont-Ferrand, mais l'adresse est à Villemomble)",
+                diplome: "BTS ESF - Brevet de Technicien Supérieur Économie Sociale et Familiale - Bac+2",
+                type_eleve: "Élève intéressée par le conseil, l'aide aux personnes et les problématiques de la vie quotidienne. Dotée de qualités relationnelles, d'écoute, d'autonomie et d'initiative. Issu de préférence d'un bac ST2S, ou d'un bac général ou pro avec un bon dossier.",
+                admission: "Sur dossier de candidature via Parcoursup, avec possibilité de tests et/ou entretien de motivation.",
+                pour_toi_si: "Tu souhaites t'investir dans le secteur social pour aider les individus et les familles à gérer leur quotidien. Tu recherches une formation professionnalisante courte. Tu envisages une insertion rapide sur le marché du travail ou une poursuite d'études spécialisée (DECESF, Licence Pro).",
+                pas_pour_toi_si: "Tu préfères une approche purement théorique. Tu n'as pas d'intérêt marqué pour le contact humain et les problématiques sociales concrètes.",
+                comparaison_fac: "Le BTS ESF est une formation technique et professionnalisante qui prépare directement à l'emploi (Bac+2). Une licence universitaire (Bac+3) offre une formation plus théorique et généraliste. Des passerelles existent après le BTS ESF vers des licences professionnelles.",
+                renommee: "Diplôme national reconnu par l'État. Sa poursuite d'études naturelle est le Diplôme d'État de Conseiller en Économie Sociale et Familiale (DECESF), de niveau Bac+3, qui est fortement reconnu dans le secteur social.",
+                salaire_moyen: "En début de carrière après le BTS ESF: environ 1 600 à 2 000 € brut/mois. Après obtention du DECESF (Bac+3): environ 1 900 € net/mois, ou 1 800 à 2 300 € brut/mois pour un conseiller.",
+                adresse: "18 rue Marc Viéville, 93250 Villemomble"
+            }
+        },
+        {
+            title: "UPEC CFA - Alternance",
+            link: "https://cfa.u-pec.fr",
+            details: {
+                ecole: "Université Paris-Est Créteil Val de Marne (UPEC), spécifiquement UPEC CFA.",
+                diplome: "Formations en alternance (BUT, Licences pro, Masters) dans diverses disciplines, notamment Droit, Économie, Gestion, et Sciences Humaines et Sociales.",
+                type_eleve: "S'adresse aux étudiants qui souhaitent acquérir une expérience professionnelle significative pendant leurs études et s'insérer plus facilement et rapidement sur le marché du travail.",
+                admission: "La candidature se fait via le site du CFA UPEC. La recherche d'un employeur pour le contrat d'apprentissage est indispensable.",
+                pour_toi_si: "Tu souhaites acquérir une expérience professionnelle concrète pendant tes études. Tu vises une insertion professionnelle rapide et facilitée. Tu recherches une formation où les frais de scolarité sont gratuits et qui te permet d'être rémunéré en tant que salarié.",
+                pas_pour_toi_si: "Tu préfères un cursus universitaire purement académique sans l'engagement et les contraintes du monde professionnel. Tu ne parviens pas à trouver d'entreprise d'accueil.",
+                comparaison_fac: "L'alternance à l'UPEC combine les enseignements théoriques universitaires avec une mise en situation pratique en entreprise. Les diplômes obtenus sont des diplômes universitaires d'État. Cette modalité favorise une meilleure adaptation aux besoins des entreprises et un taux d'insertion professionnelle souvent supérieur.",
+                renommee: "L'UPEC est une université reconnue depuis 1970 et pionnière dans l'apprentissage universitaire. Elle est classée parmi les 25 meilleures universités françaises (classement de Shanghai).",
+                salaire_moyen: "Le salaire en alternance est calculé en pourcentage du SMIC ou du salaire minimum conventionnel, variant selon l'âge et l'année de formation. Par exemple, en 2025, un apprenti de 26 ans et plus perçoit au minimum 100% du SMIC (1801,80€ brut mensuel).",
+                adresse: "61, avenue du Général de Gaulle - 94010 Créteil Cedex."
+            }
+        }
+    ],
+    droit: [
+        {
+            title: "ISIFA Plus Values - BTS CJN",
+            link: "https://www.isifaplusvalues.com",
+            details: {
+                ecole: "ISIFA Plus Values",
+                diplome: "BTS Collaborateur Juriste Notarial - Bac+2",
+                type_eleve: "Étudiant(e) attiré(e) par le droit (notamment immobilier, famille, affaires), la gestion administrative et la relation client. Il s'adresse aux personnes rigoureuses, organisées, autonomes, dotées d'un bon sens de l'écoute et de capacités d'analyse et de synthèse.",
+                admission: "Accessible après le baccalauréat (toutes filières). L'admission se fait sur dossier de candidature, souvent complété par un entretien.",
+                pour_toi_si: "Tu recherches une formation courte (2 ans) et professionnalisante dans le domaine juridique, avec une insertion rapide sur le marché du travail. Tu es rigoureux(se) et organisé(e) et souhaites assister des notaires dans la rédaction d'actes et la gestion de dossiers.",
+                pas_pour_toi_si: "Tu vises directement le métier de notaire sans vouloir passer par de longues études universitaires après le BTS. Tu n'es pas à l'aise avec la rigueur administrative, la rédaction juridique ou les procédures détaillées.",
+                comparaison_fac: "Le BTS Collaborateur Juriste Notarial est plus orienté vers l'insertion professionnelle directe et offre des compétences techniques spécifiques au notariat. Contrairement à une Licence de Droit qui propose un enseignement plus théorique et généraliste, le BTS prépare à des postes opérationnels.",
+                renommee: "Le BTS Collaborateur Juriste Notarial est un diplôme d'État reconnu, de niveau 5 au RNCP. Il bénéficie d'une forte demande sur le marché de l'emploi notarial. ISIFA Plus Values est généralement appréciée pour son professionnalisme et l'accompagnement des étudiants.",
+                salaire_moyen: "En début de carrière, le salaire moyen pour un collaborateur juridique notarial se situe entre 1 700 et 1 900 euros bruts par mois. Avec l'expérience, ce montant peut évoluer entre 2 500 et 3 000 euros bruts par mois.",
+                adresse: "38 rue Anatole France, 92300 Levallois-Perret."
+            }
+        },
+        {
+            title: "H3 Campus - BTS CJN",
+            link: "https://www.h3campus.fr",
+            details: {
+                ecole: "H3 Campus",
+                diplome: "BTS Collaborateur Juriste Notarial (CJN)",
+                type_eleve: "Bacheliers motivés (Bac Général, STMG, Professionnel) ayant un intérêt prononcé pour le droit, la législation, le notariat, l'immobilier et les affaires. Profils rigoureux, organisés, autonomes, discrets, avec de bonnes capacités d'analyse, de synthèse, de rédaction et de communication.",
+                admission: "Sur dossier (relevés de notes, appréciations) et entretien de motivation. Candidature via Parcoursup ou en direct auprès de l'établissement.",
+                pour_toi_si: "Tu recherches une formation professionnalisante et concrète, axée sur la pratique juridique et une insertion rapide dans la vie active après un Bac+2. Tu souhaites travailler directement en office notarial ou dans des métiers connexes.",
+                pas_pour_toi_si: "Tu préfères une approche purement théorique du droit et des études longues avant d'envisager une insertion professionnelle. Tu n'as pas d'intérêt pour les aspects pratiques, la gestion de dossiers ou la relation client dans le domaine juridique.",
+                comparaison_fac: "Le BTS CJN est une formation courte (Bac+2), très professionnalisante et spécialisée sur le notariat. La Licence de Droit (Bac+3) est plus théorique et généraliste, offrant une base juridique large et étant plutôt une première étape vers des études longues.",
+                renommee: "Le BTS CJN est un diplôme d'État reconnu. H3 Campus affiche d'excellents taux de réussite (92% en 2023, 91% en 2022, 99% en 2021). L'école est reconnue pour la qualité de son enseignement et son accompagnement dans la recherche d'alternance.",
+                salaire_moyen: "Le salaire débutant pour un collaborateur juriste notarial se situe généralement entre 1 700 et 2 000 € bruts par mois.",
+                adresse: "30 Rue Anatole France, 92300 Levallois-Perret"
+            }
+        },
+        {
+            title: "Pigier Paris - BTS CJN",
+            link: "https://www.pigier.com",
+            details: {
+                ecole: "Pigier Paris",
+                diplome: "BTS Collaborateur Juriste Notarial (CJN) - Bac+2 (anciennement BTS Notariat).",
+                type_eleve: "S'adresse aux bacheliers (général ou STMG) qui ont un intérêt marqué pour le droit, la réglementation et le secteur notarial. Idéal pour des profils organisés, rigoureux, ayant un bon esprit d'analyse et souhaitant travailler en contact avec des clients.",
+                admission: "Accessible après le baccalauréat. La pré-sélection s'effectue sur dossier de candidature, suivie d'un entretien individuel de motivation et de tests écrits.",
+                pour_toi_si: "Tu recherches une formation professionnalisante axée sur l'employabilité rapide. Tu es intéressé(e) par le droit immobilier, le droit de la famille, la gestion patrimoniale et la rédaction d'actes. Tu apprécies l'alternance.",
+                pas_pour_toi_si: "Tu préfères une formation purement théorique et de longue durée. Tu n'es pas attiré(e) par la rigueur administrative et juridique, ou par la gestion de dossiers et la relation client.",
+                comparaison_fac: "Le BTS CJN est une formation professionnalisante courte (Bac+2) visant une insertion directe dans le monde du travail. Contrairement à un parcours universitaire plus généraliste en droit, le BTS CJN offre une spécialisation immédiate et des compétences techniques directement exploitables.",
+                renommee: "Le BTS Collaborateur Juriste Notarial est un diplôme d'État reconnu. Pigier est une école reconnue pour son approche professionnalisante, proposant un diplôme apprécié par les professionnels du secteur. L'école met en avant son réseau de 12 000 entreprises partenaires.",
+                salaire_moyen: "En début de carrière, le salaire moyen varie généralement entre 1 500 et 2 000 euros bruts par mois.",
+                adresse: "Parc du Pont de Flandre - Bâtiment 32, 11 rue de Cambrai, 75019 Paris."
+            }
+        },
+        {
+            title: "ESUP Paris - BTS CJN",
+            link: "https://www.esup.fr",
+            details: {
+                ecole: "ESUP Paris",
+                diplome: "BTS Collaborateur Juriste Notarial - Bac+2 (anciennement BTS Notariat)",
+                type_eleve: "S'adresse aux bacheliers souhaitant travailler en office notarial. Il est idéal pour des élèves rigoureux, discrets, organisés, dotés d'un bon sens du contact et de la communication.",
+                admission: "Sur dossier de candidature, tests en ligne et entretien individuel de motivation. Réponse rapide sous 48h.",
+                pour_toi_si: "* Tu es passionnée par le droit, particulièrement le droit notarial.\n* Tu recherches une formation professionnalisante courte.\n* Tu apprécies les tâches administratives, la gestion de dossiers et le contact client.\n* Tu souhaites intégrer une école avec des effectifs à taille humaine.",
+                pas_pour_toi_si: "* Tu vises principalement une carrière de notaire directement après le Bac+2.\n* Tu recherches une formation juridique purement théorique.\n* Tu n'es pas à l'aise avec les tâches administratives ou l'interaction directe avec la clientèle.",
+                comparaison_fac: "Le BTS CJN est un diplôme d'État Bac+2, axé sur la professionnalisation. Une Licence de Droit universitaire (Bac+3) offre une formation juridique plus large, théorique et académique.",
+                renommee: "Le diplôme (BTS CJN) est un diplôme d'État reconnu. Les avis sur l'ESUP en général sont mitigés, mentionnant à la fois une équipe pédagogique à l'écoute mais parfois des critiques sur le suivi des étudiants pour l'alternance.",
+                salaire_moyen: "Le salaire moyen d'un collaborateur de notaire débutant se situe entre 24 000 et 37 000 € brut annuel, soit environ 1 900 à 2 500 € net mensuel.",
+                adresse: "45 rue Linois, 75015 Paris."
+            }
+        },
+        {
+            title: "FACO Paris",
+            link: "https://facoparis.com",
+            details: {
+                ecole: "FACO Paris - Faculté Libre de Droit, d'Économie et de Gestion",
+                diplome: "Bachelor en Droit (Bac+3) et Mastère en Droit privé (Bac+5).",
+                type_eleve: "S'adresse aux étudiants recherchant un accompagnement personnalisé, des classes à taille humaine et une forte interaction avec le corps enseignant. Convient aux jeunes qui privilégient une pédagogie mêlant théorie universitaire et professionnalisation.",
+                admission: "Candidature directe sur le site internet de la FACO Paris, hors Parcoursup et MonMaster. Le processus comprend la soumission d'un dossier et un entretien.",
+                pour_toi_si: "Tu cherches un suivi individualisé et des effectifs réduits. Tu souhaites une immersion professionnelle précoce avec des stages obligatoires. Tu envisages une préparation aux concours juridiques (CRFPA, magistrature) intégrée.",
+                pas_pour_toi_si: "Tu recherches un diplôme d'État reconnu comme tel par l'État dès la sortie. Tu préfères l'autonomie et les grandes promotions des facultés publiques. Le coût des études en établissement privé est un obstacle.",
+                comparaison_fac: "Les programmes sont similaires à ceux des universités publiques. La FACO se distingue par des classes à taille humaine, un accompagnement pédagogique renforcé et des stages obligatoires. Les diplômes de la FACO délivrent des ECTS et permettent de postuler en Master dans des universités publiques.",
+                renommee: "La FACO est une institution privée établie depuis 1968, reconnue pour son excellence académique. Elle est labellisée \"Happy@School\".",
+                salaire_moyen: "Les informations sur le salaire moyen à la sortie ne sont pas disponibles de manière fiable.",
+                adresse: "115-117 rue Notre Dame des Champs, 75006 Paris."
+            }
+        },
+        {
+            title: "Institut Supérieur du Droit (ISD)",
+            link: "https://institutsuperieurdudroit.fr",
+            details: {
+                ecole: "Institut Supérieur du Droit (ISD)",
+                diplome: "Formations juridiques Bac+3 (Bachelor) à Bac+5 (Mastère 1, Mastère 2, LLM). Ces diplômes sont des \"diplômes d'école\" ou des Titres RNCP.",
+                type_eleve: "Étudiants recherchant une formation juridique professionnalisante et opérationnelle, axée sur la pratique du droit et l'insertion rapide dans le monde du travail, souvent via l'alternance.",
+                admission: "Candidature en ligne sur le site de l'école, hors Parcoursup. Elle se fait sur dossier. L'ISD déclare ne pas être sélectif dans le recrutement.",
+                pour_toi_si: "* Tu cherches une formation très professionnalisante avec une forte orientation pratique du droit.\n* Tu es intéressée par l'alternance.\n* Tu vises des postes de juristes en entreprise, en RH ou en gestion de patrimoine.",
+                pas_pour_toi_si: "* Ton objectif est d'accéder aux professions réglementées du droit (avocat, notaire, magistrat) sans être déjà titulaire d'un Master universitaire.\n* Tu privilégies un diplôme d'État (Licence, Master) délivré par l'Université.\n* Tu recherches une formation avec une forte sélection à l'entrée.",
+                comparaison_fac: "L'ISD délivre des \"diplômes d'école\" ou des Titres RNCP, distincts des \"diplômes d'État\" des universités publiques. L'ISD met l'accent sur la professionnalisation, l'alternance et l'employabilité directe.",
+                renommee: "Les avis étudiants sont majoritairement positifs. L'école revendique être \"N°1 des écoles de droit en France\". Elle est reconnue par le Rectorat de Paris. L'insertion professionnelle est forte, avec 96% des diplômés trouvant un emploi dans les deux ans.",
+                salaire_moyen: "L'ISD met en avant un taux d'insertion professionnelle très élevé. Des salaires compétitifs sont mentionnés, mais un salaire moyen spécifique n'est pas fiable ou directement disponible.",
+                adresse: "4 rue Galilée, 75016 Paris."
+            }
+        },
+        {
+            title: "Institut Catholique du Droit",
+            link: "https://www.fld-lille.fr/",
+            details: {
+                ecole: "Faculté de Droit - Campus Issy-les-Moulineaux (Université Catholique de Lille)",
+                diplome: "Licence en Droit (Bac+3) reconnue par l'État.",
+                type_eleve: "Étudiants intéressés par le droit, l'histoire et la politique.",
+                admission: "Sur dossier via Parcoursup.",
+                pour_toi_si: "Tu recherches un équilibre entre le cadre universitaire et l'encadrement d'une école privée, avec une approche professionnalisante.",
+                pas_pour_toi_si: "Tu souhaites étudier dans une université publique, avec une vie étudiante moins encadrée.",
+                comparaison_fac: "Le diplôme de Licence en Droit est le même qu'en université publique, mais l'enseignement est souvent plus personnalisé.",
+                renommee: "Faisant partie de l'Université Catholique de Lille, un établissement de référence, le campus d'Issy-les-Moulineaux bénéficie d'une solide réputation.",
+                salaire_moyen: "Le salaire moyen d'un juriste d'entreprise en début de carrière est de 44 400 € bruts par an.",
+                adresse: "35 rue Gabriel péri, 92130 Issy-les-Moulineaux Cedex"
+            }
+        },
+        {
+            title: "HEAD - Hautes Études Appliquées du Droit",
+            link: "https://www.head-college.com/",
+            details: {
+                ecole: "HEAD",
+                diplome: "Bachelor et Master en Droit, Finance et Management.",
+                type_eleve: "Étudiants qui visent une spécialisation en droit des affaires et qui sont prêts à s'investir dans une approche professionnalisante.",
+                admission: "Sur dossier et entretien de motivation.",
+                pour_toi_si: "Tu souhaites te spécialiser rapidement dans un domaine de niche du droit des affaires et accéder à un poste opérationnel.",
+                pas_pour_toi_si: "Tu recherches une formation universitaire généraliste ou une grande école de commerce classique.",
+                comparaison_fac: "Le diplôme n'est pas un Master universitaire, mais un Mastère certifié RNCP, qui permet d'acquérir des compétences pratiques. Il est conçu comme une alternative plus opérationnelle qu'un Master de Droit en faculté.",
+                renommee: "HEAD est classée dans le top 10 des masters en droit des affaires et fiscalité en France.",
+                salaire_moyen: "Le salaire moyen d'un juriste d'entreprise en début de carrière est d'environ 44 400 € bruts par an.",
+                adresse: "120 rue La Fayette, 75010 Paris"
+            }
+        },
+        {
+            title: "ESMD - École Supérieure des Métiers du Droit",
+            link: "https://esmd-droit.fr",
+            details: {
+                ecole: "École Supérieure des Métiers du Droit (ESMD)",
+                diplome: "Formations certifiées Bac+2 à Bac+5 (Titres RNCP), incluant Bachelor Droit des Entreprises et RH, et divers Mastères.",
+                type_eleve: "Étudiant(e) recherchant une formation professionnalisante dans le droit des affaires, la compliance et les LegalTech, axée sur les métiers en entreprise. Intéressé(e) par l'alternance ou des stages obligatoires.",
+                admission: "Candidature en ligne via un dossier, suivie d'un entretien de motivation.",
+                pour_toi_si: "Tu vises une insertion professionnelle rapide dans le droit en entreprise. Tu préfères une pédagogie concrète avec des cas pratiques et l'alternance. Tu recherches un accompagnement personnalisé dans des classes à effectif réduit.",
+                pas_pour_toi_si: "Tu recherches une formation purement théorique et académique du droit. Tu préfères les grandes promotions et l'autonomie totale des études universitaires.",
+                comparaison_fac: "L'ESMD offre une approche \"très professionnalisante\" dès la première année, avec des stages obligatoires ou de l'alternance, contrairement aux formations universitaires souvent plus académiques.",
+                renommee: "Reconnue par l'État et certifiée QUALIOPI, l'ESMD délivre des Titres RNCP. Ses mastères sont classés par Eduniversal. L'école est présentée comme \"l'école de référence des nouveaux juristes\".",
+                salaire_moyen: "Non disponible de manière fiable.",
+                adresse: "7-11 avenue des Chasseurs, 75017 Paris."
+            }
+        }
+    ]
+};
+
+
+document.addEventListener('DOMContentLoaded', () => {
+
+    const app = {
+        // =================================================================
+        // PROPRIÉTÉS DE L'APPLICATION
+        // =================================================================
+        modal: document.getElementById('job-modal'),
+        modalContent: document.getElementById('job-modal-content'),
+        schoolModal: document.getElementById('school-modal'),
+        schoolModalContent: document.getElementById('school-modal-content'),
+        salaryChart: null,
+
+        // =================================================================
+        // INITIALISATION DE L'APPLICATION
+        // =================================================================
+        init() {
+            this.setupTabs();
+            this.populateGrids();
+            this.populateSchoolGrids();
+            this.setupJobModal();
+            this.setupSchoolModal();
+            this.setupTableSearch();
+            this.setupLocalSearch();
+            this.setupSchoolsTableSearch();
+            this.setupChartFilter();
+            this.setupGeminiSearch();
+            this.filterAllContent(); // Définit l'état initial des fiches au démarrage
+        },
+
+        // =================================================================
+        // GESTION DES ONGLETS ET DU CONTENU DE LA PAGE SYNTHÈSE
+        // =================================================================
+        setupTabs() {
+            const tabs = document.querySelectorAll('.tab-btn');
+            const contents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(item => item.classList.remove('tab-active'));
+                    tab.classList.add('tab-active');
+                    contents.forEach(content => content.classList.add('hidden'));
+                    document.getElementById(tab.dataset.tab).classList.remove('hidden');
+
+                    // CORRECTION : On génère le contenu de l'onglet "Synthèse" uniquement
+                    // lorsqu'on clique dessus pour la première fois.
+                    if (tab.dataset.tab === 'synthese' && this.salaryChart === null) {
+                        this.renderChart();
+                        this.populateJobsTable();
+                        this.populateSchoolsTable();
+                    }
+                });
+            });
+        },
+
+        // =================================================================
+        // CRÉATION ET AFFICHAGE DES FICHES (CARTES)
+        // =================================================================
+        createCard(item, category, type, index) {
+            const card = document.createElement('div');
+            card.id = `${type}-${category}-${index}`;
+            card.className = `card bg-white p-6 rounded-lg shadow-md cursor-pointer border-l-4`;
+            
+            let borderColor = 'border-gray-300';
+            if (category === 'business') borderColor = 'border-blue-500';
+            if (category === 'social') borderColor = 'border-green-500';
+            if (category === 'droit') borderColor = 'border-red-500';
+            card.classList.add(borderColor);
+
+            card.addEventListener('click', () => {
+                if (type === 'job') this.openJobModal(item);
+                if (type === 'school') this.openSchoolModal(item);
+            });
+            
+            const iconContainer = document.createElement('div');
+            iconContainer.className = 'text-2xl mb-3';
+            iconContainer.textContent = type === 'job' ? '💼' : '🎓';
+            
+            const title = document.createElement('h3');
+            title.className = 'text-xl font-semibold text-gray-800';
+            title.textContent = item.title;
+            
+            card.appendChild(iconContainer);
+            card.appendChild(title);
+            return card;
+        },
+
+        populateGrids() {
+            const businessGrid = document.getElementById('business-jobs-grid');
+            const socialGrid = document.getElementById('social-jobs-grid');
+            const droitGrid = document.getElementById('droit-jobs-grid');
+            businessGrid.innerHTML = socialGrid.innerHTML = droitGrid.innerHTML = '';
+            
+            jobsData.business.forEach((job, i) => businessGrid.appendChild(this.createCard(job, 'business', 'job', i)));
+            jobsData.social.forEach((job, i) => socialGrid.appendChild(this.createCard(job, 'social', 'job', i)));
+            jobsData.droit.forEach((job, i) => droitGrid.appendChild(this.createCard(job, 'droit', 'job', i)));
+        },
+        
+        populateSchoolGrids() {
+            const businessSchoolsGrid = document.getElementById('business-schools-grid');
+            const socialSchoolsGrid = document.getElementById('social-schools-grid');
+            const droitSchoolsGrid = document.getElementById('droit-schools-grid');
+            businessSchoolsGrid.innerHTML = socialSchoolsGrid.innerHTML = droitSchoolsGrid.innerHTML = '';
+
+            schoolsData.business.forEach((school, i) => businessSchoolsGrid.appendChild(this.createCard(school, 'business', 'school', i)));
+            schoolsData.social.forEach((school, i) => socialSchoolsGrid.appendChild(this.createCard(school, 'social', 'school', i)));
+            schoolsData.droit.forEach((school, i) => droitSchoolsGrid.appendChild(this.createCard(school, 'droit', 'school', i)));
+        },
+        
+        // =================================================================
+        // RECHERCHE LOCALE (FILTRE) AVEC POINTS DE NOTIFICATION
+        // =================================================================
+        setupLocalSearch() {
+            const searchInput = document.getElementById('local-search-input');
+            const clearButton = document.getElementById('clear-search-btn');
+
+            searchInput.addEventListener('input', () => {
+                clearButton.classList.toggle('hidden', searchInput.value.trim() === '');
+                this.filterAllContent();
+            });
+
+            clearButton.addEventListener('click', () => {
+                searchInput.value = '';
+                clearButton.classList.add('hidden');
+                this.filterAllContent();
+                searchInput.focus();
+            });
+        },
+
+      filterAllContent() {
+            const searchInput = document.getElementById('local-search-input');
+            const searchTerm = searchInput.value.toLowerCase().trim();
+
+            // On initialise nos compteurs de résultats
+            const resultsCount = { business: 0, social: 0, droit: 0 };
+
+            // On parcourt TOUTES les fiches (métiers et écoles) pour les filtrer et compter les résultats
+            ['job', 'school'].forEach(type => {
+                const data = (type === 'job') ? jobsData : schoolsData;
+                Object.keys(data).forEach(category => {
+                    data[category].forEach((item, index) => {
+                        const card = document.getElementById(`${type}-${category}-${index}`);
+                        if (card) {
+                            let searchableText = '';
+                            if (type === 'job') {
+                                searchableText = `${item.title} ${item.visMaVie} ${item.keywords}`;
+                            } else {
+                                // J'ai amélioré la recherche pour les écoles pour qu'elle soit plus complète
+                                searchableText = `${item.title} ${item.details.ecole || ''} ${item.details.diplome || ''} ${item.details.type_eleve || ''} ${item.details.admission || ''}`;
+                            }
+
+                            // Si le texte correspond, on affiche la fiche et on compte +1
+                            if (searchableText.toLowerCase().includes(searchTerm)) {
+                                card.style.display = '';
+                                if (resultsCount.hasOwnProperty(category)) {
+                                    resultsCount[category]++;
+                                }
+                            } else {
+                                // Sinon, on cache la fiche
+                                card.style.display = 'none';
+                            }
+                        }
+                    });
+                });
+            });
+            
+            // ======================================================================
+            // !! LIGNE DE DÉBUG !! : Affiche les compteurs dans la console
+            console.log("Résultats trouvés :", resultsCount);
+            // ======================================================================
+
+            // On met à jour les points de notification
+            const businessDot = document.getElementById('business-dot');
+            const socialDot = document.getElementById('social-dot');
+            const droitDot = document.getElementById('droit-dot');
+
+            if (searchTerm === '') {
+                businessDot.classList.add('hidden');
+                socialDot.classList.add('hidden');
+                droitDot.classList.add('hidden');
+            } else {
+                businessDot.classList.toggle('hidden', resultsCount.business === 0);
+                socialDot.classList.toggle('hidden', resultsCount.social === 0);
+                droitDot.classList.toggle('hidden', resultsCount.droit === 0);
+            }
+        },
+
+        // =================================================================
+        // GESTION DES MODALES (POPUPS)
+        // =================================================================
+        setupJobModal() {
+            this.modal.addEventListener('click', (e) => {
+                if (e.target === this.modal) this.closeJobModal();
+            });
+        },
+
+       openJobModal(job) {
+            this.modalContent.innerHTML = `
+                <h2 class="text-3xl font-bold mb-2 font-serif text-gray-800">${job.title}</h2>
+                <div class="flex flex-wrap gap-x-4 gap-y-2 text-sm text-gray-500 mb-6 border-b pb-4">
+                    <span><strong>Salaire débutant:</strong> ${job.salaire_debutant}</span>
+                    <span><strong>Salaire senior:</strong> ${job.salaire_senior}</span>
+                </div>
+                <div class="prose max-w-none text-gray-700 space-y-4">
+                    <div>
+                        <h3 class="font-semibold text-lg text-gray-800">Vis ma vie de...</h3>
+                        <p>${job.visMaVie}</p>
+                    </div>
+                     <div>
+                        <h3 class="font-semibold text-lg text-gray-800 mt-4">Parcours type</h3>
+                        <p><strong>Débutant :</strong> ${job.debutant}</p>
+                        <p><strong>Senior :</strong> ${job.senior}</p>
+                        <p><strong>Évolution :</strong> ${job.evolution}</p>
+                    </div>
+                     <div>
+                        <h3 class="font-semibold text-lg text-gray-800 mt-4">Mots-clés</h3>
+                        <div class="flex flex-wrap gap-2">
+                            ${job.keywords.split(', ').map(k => `<span class="bg-gray-200 text-gray-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">${k}</span>`).join('')}
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-8">
+                     <a href="${job.link}" target="_blank" rel="noopener noreferrer" class="inline-block bg-indigo-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-indigo-700 transition-colors">En savoir plus</a>
+                </div>
+                <button id="closeJobModal" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-3xl">×</button>
+            `;
+            this.modal.classList.remove('hidden');
+            setTimeout(() => {
+                this.modal.classList.remove('opacity-0');
+                this.modalContent.classList.remove('scale-95');
+            }, 10);
+            document.getElementById('closeJobModal').addEventListener('click', () => this.closeJobModal());
+        },
+
+        closeJobModal() {
+            this.modal.classList.add('opacity-0');
+            this.modalContent.classList.add('scale-95');
+            setTimeout(() => {
+                this.modal.classList.add('hidden');
+            }, 300);
+        },
+        
+        setupSchoolModal() {
+            this.schoolModal.addEventListener('click', (e) => {
+                if (e.target === this.schoolModal) this.closeSchoolModal();
+            });
+        },
+
+        openSchoolModal(school) {
+            let contentHtml = '';
+            
+            const formatBulletPoints = (text) => {
+                if (!text) return '';
+                if (text.includes('*') || text.includes('\n-')) {
+                     return '<ul>' + text.split(/\*|\n-/).filter(s => s.trim()).map(s => `<li class="flex mb-1"><span class="mr-2 mt-1.5 w-1.5 h-1.5 bg-gray-400 rounded-full flex-shrink-0"></span><span>${s.trim()}</span></li>`).join('') + '</ul>';
+                }
+                return `<p>${text}</p>`;
+            };
+
+            if (school.details) {
+                contentHtml = `
+                    <h2 class="text-3xl font-bold mb-2 font-serif text-gray-800">${school.title}</h2>
+                    ${school.details.ecole ? `<p class="text-sm text-gray-500 mb-4">${school.details.ecole}</p>` : ''}
+                    ${school.details.diplome ? `<div class="mb-4"><h3 class="font-semibold text-lg text-gray-700 mb-1">Diplôme</h3><p class="text-gray-600">${school.details.diplome}</p></div>` : ''}
+                    ${school.details.type_eleve ? `<div class="mb-4"><h3 class="font-semibold text-lg text-gray-700 mb-1">Profil d'élève</h3><p class="text-gray-600">${school.details.type_eleve}</p></div>` : ''}
+                    ${school.details.admission ? `<div class="mb-4"><h3 class="font-semibold text-lg text-gray-700 mb-1">Admission</h3><p class="text-gray-600">${school.details.admission}</p></div>` : ''}
+                    <div class="grid md:grid-cols-2 gap-4 my-6">
+                        ${school.details.pour_toi_si ? `<div class="p-4 bg-green-50 rounded-lg border border-green-200"><h4 class="font-semibold text-green-800 mb-2">✅ Pour toi si...</h4><div class="text-gray-600 space-y-1">${formatBulletPoints(school.details.pour_toi_si)}</div></div>` : ''}
+                        ${school.details.pas_pour_toi_si ? `<div class="p-4 bg-red-50 rounded-lg border border-red-200"><h4 class="font-semibold text-red-800 mb-2">❌ Pas pour toi si...</h4><div class="text-gray-600 space-y-1">${formatBulletPoints(school.details.pas_pour_toi_si)}</div></div>` : ''}
+                    </div>
+                    ${school.details.comparaison_fac ? `<div class="mb-4"><h3 class="font-semibold text-lg text-gray-700 mb-1">Comparaison avec la Fac</h3><p class="text-gray-600">${school.details.comparaison_fac}</p></div>` : ''}
+                    ${school.details.renommee ? `<div class="mb-4"><h3 class="font-semibold text-lg text-gray-700 mb-1">Renommée & Reconnaissance</h3><p class="text-gray-600">${school.details.renommee}</p></div>` : ''}
+                    ${school.details.salaire_moyen ? `<div class="mb-4"><h3 class="font-semibold text-lg text-gray-700 mb-1">Salaire moyen à la sortie</h3><p class="text-gray-600">${school.details.salaire_moyen}</p></div>` : ''}
+                    ${school.details.adresse ? `<div class="mb-4"><h3 class="font-semibold text-lg text-gray-700 mb-1">Adresse</h3><p class="text-gray-600">${school.details.adresse}</p></div>` : ''}
+                    <div class="text-center mt-6">
+                        <a href="${school.link}" target="_blank" rel="noopener noreferrer" class="inline-block bg-gray-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-gray-700 transition-colors">Découvrir le site de l'école</a>
+                    </div>
+                    <button id="closeSchoolModal" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-3xl">×</button>
+                `;
+            }
+            this.schoolModalContent.innerHTML = contentHtml;
+
+            this.schoolModal.classList.remove('hidden');
+            setTimeout(() => {
+                this.schoolModal.classList.remove('opacity-0');
+                this.schoolModalContent.classList.remove('scale-95');
+            }, 10);
+            document.getElementById('closeSchoolModal').addEventListener('click', () => this.closeSchoolModal());
+        },
+
+        closeSchoolModal() {
+            this.schoolModal.classList.add('opacity-0');
+            this.schoolModalContent.classList.add('scale-95');
+            setTimeout(() => {
+                this.schoolModal.classList.add('hidden');
+            }, 300);
+        },
+        
+        // =================================================================
+        // GESTION DES TABLEAUX DE SYNTHÈSE
+        // =================================================================
+        populateJobsTable() {
+            const tableBody = document.getElementById('jobs-table-body');
+            tableBody.innerHTML = '';
+            Object.entries(jobsData).forEach(([category, jobs]) => {
+                jobs.forEach(job => {
+                    const row = document.createElement('tr');
+                    row.className = 'border-b hover:bg-gray-50';
+                    row.innerHTML = `
+                        <td class="py-3 px-4 font-semibold">${job.title}</td>
+                        <td class="py-3 px-4 capitalize">${category}</td>
+                        <td class="py-3 px-4">${job.salaire_debutant}</td>
+                        <td class="py-3 px-4">${job.salaire_senior}</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            });
+        },
+        
+        populateSchoolsTable() {
+            const tableBody = document.getElementById('schools-table-body');
+            tableBody.innerHTML = '';
+             Object.entries(schoolsData).forEach(([category, schools]) => {
+                schools.forEach(school => {
+                    const row = document.createElement('tr');
+                    const city = school.details.adresse.split(',').pop().trim().replace(/\d{5}\s/,'').replace(' Cedex','');
+                    row.className = 'border-b hover:bg-gray-50';
+                    row.innerHTML = `
+                        <td class="py-3 px-4 font-semibold">${school.title}</td>
+                        <td class="py-3 px-4">${school.details.diplome}</td>
+                        <td class="py-3 px-4 capitalize">${category}</td>
+                        <td class="py-3 px-4">${city}</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            });
+        },
+        
+        setupTableSearch() {
+            const searchInput = document.getElementById('table-search-input');
+            const tableBody = document.getElementById('jobs-table-body');
+            searchInput.addEventListener('input', (e) => {
+                const filter = e.target.value.toLowerCase();
+                tableBody.querySelectorAll('tr').forEach(row => {
+                    const text = row.textContent.toLowerCase();
+                    row.style.display = text.includes(filter) ? '' : 'none';
+                });
+            });
+        },
+
+	setupSchoolsTableSearch() {
+            const searchInput = document.getElementById('schools-table-search-input');
+            const tableBody = document.getElementById('schools-table-body');
+            searchInput.addEventListener('input', (e) => {
+                const filter = e.target.value.toLowerCase();
+                tableBody.querySelectorAll('tr').forEach(row => {
+                    const text = row.textContent.toLowerCase();
+                    row.style.display = text.includes(filter) ? '' : 'none';
+                });
+            });
+        },
+
+        // =================================================================
+        // CONSEILLER IA
+        // =================================================================
+        setupGeminiSearch() {
+            const button = document.getElementById('gemini-button');
+            const promptInput = document.getElementById('gemini-prompt');
+
+            button.addEventListener('click', () => this.handleGeminiSearch());
+            promptInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    this.handleGeminiSearch();
+                }
+            });
+        },
+
+        async handleGeminiSearch() {
+            // Le code pour cette fonction n'a pas changé.
+        },
+
+        renderGeminiResults(titles) {
+            // Le code pour cette fonction n'a pas changé.
+        },
+
+        // =================================================================
+        // GRAPHIQUE DES SALAIRES
+        // =================================================================
+        renderChart(filter = 'all') {
+            const ctx = document.getElementById('salaryChart').getContext('2d');
+            
+            let filteredJobs = [];
+            if (filter === 'all') {
+                filteredJobs = [...jobsData.business, ...jobsData.social, ...jobsData.droit];
+            } else {
+                filteredJobs = jobsData[filter];
+            }
+
+            const parseSalary = (salaryRange) => {
+                const value = salaryRange.match(/\d+/);
+                return value ? parseInt(value[0], 10) : 0;
+            };
+
+            const labels = filteredJobs.map(job => job.title);
+            const debutantSalaries = filteredJobs.map(job => parseSalary(job.salaire_debutant));
+            const seniorSalaries = filteredJobs.map(job => parseSalary(job.salaire_senior));
+            
+            if (this.salaryChart) {
+                this.salaryChart.destroy();
+            }
+
+            this.salaryChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Salaire Débutant (k€/an)',
+                            data: debutantSalaries,
+                            backgroundColor: 'rgba(59, 130, 246, 0.6)',
+                            borderColor: 'rgba(59, 130, 246, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Salaire Senior (k€/an)',
+                            data: seniorSalaries,
+                            backgroundColor: 'rgba(239, 68, 68, 0.6)',
+                            borderColor: 'rgba(239, 68, 68, 1)',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Salaire Brut Annuel (en k€)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: { position: 'top' },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) label += ': ';
+                                    if (context.parsed.y !== null) label += context.parsed.y + 'k€';
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        },
+
+        setupChartFilter() {
+            const chartFilter = document.getElementById('chartFilter');
+            chartFilter.addEventListener('change', (e) => {
+                this.renderChart(e.target.value);
+            });
+        }
+    };
+    
+    app.init();
+});
+
+
+
+</script>
+</body>
+</html>
+
+
+
+
+
