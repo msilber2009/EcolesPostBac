@@ -1308,6 +1308,7 @@ const schoolsData = {
 };
 
 
+
 document.addEventListener('DOMContentLoaded', () => {
 
     const app = {
@@ -1329,16 +1330,19 @@ document.addEventListener('DOMContentLoaded', () => {
             this.populateSchoolGrids();
             this.setupJobModal();
             this.setupSchoolModal();
+            // On remet la création des tableaux ici pour qu'ils existent au démarrage
+            this.populateJobsTable();
+            this.populateSchoolsTable();
             this.setupTableSearch();
-            this.setupLocalSearch();
             this.setupSchoolsTableSearch();
+            this.setupLocalSearch();
             this.setupChartFilter();
             this.setupGeminiSearch();
-            this.filterAllContent(); // Définit l'état initial des fiches au démarrage
+            this.filterAllContent(); // Définit l'état initial des fiches
         },
 
         // =================================================================
-        // GESTION DES ONGLETS ET DU CONTENU DE LA PAGE SYNTHÈSE
+        // GESTION DES ONGLETS ET DU GRAPHIQUE
         // =================================================================
         setupTabs() {
             const tabs = document.querySelectorAll('.tab-btn');
@@ -1351,12 +1355,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     contents.forEach(content => content.classList.add('hidden'));
                     document.getElementById(tab.dataset.tab).classList.remove('hidden');
 
-                    // CORRECTION : On génère le contenu de l'onglet "Synthèse" uniquement
-                    // lorsqu'on clique dessus pour la première fois.
+                    // On ne génère QUE le graphique au clic, les tableaux existent déjà.
                     if (tab.dataset.tab === 'synthese' && this.salaryChart === null) {
                         this.renderChart();
-                        this.populateJobsTable();
-                        this.populateSchoolsTable();
                     }
                 });
             });
@@ -1436,49 +1437,36 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         },
 
-      filterAllContent() {
+        filterAllContent() {
             const searchInput = document.getElementById('local-search-input');
             const searchTerm = searchInput.value.toLowerCase().trim();
-
-            // On initialise nos compteurs de résultats
             const resultsCount = { business: 0, social: 0, droit: 0 };
 
-            // On parcourt TOUTES les fiches (métiers et écoles) pour les filtrer et compter les résultats
             ['job', 'school'].forEach(type => {
                 const data = (type === 'job') ? jobsData : schoolsData;
                 Object.keys(data).forEach(category => {
-                    data[category].forEach((item, index) => {
-                        const card = document.getElementById(`${type}-${category}-${index}`);
-                        if (card) {
-                            let searchableText = '';
-                            if (type === 'job') {
-                                searchableText = `${item.title} ${item.visMaVie} ${item.keywords}`;
-                            } else {
-                                // J'ai amélioré la recherche pour les écoles pour qu'elle soit plus complète
-                                searchableText = `${item.title} ${item.details.ecole || ''} ${item.details.diplome || ''} ${item.details.type_eleve || ''} ${item.details.admission || ''}`;
-                            }
-
-                            // Si le texte correspond, on affiche la fiche et on compte +1
-                            if (searchableText.toLowerCase().includes(searchTerm)) {
-                                card.style.display = '';
-                                if (resultsCount.hasOwnProperty(category)) {
-                                    resultsCount[category]++;
+                    if (data[category]) {
+                        data[category].forEach((item, index) => {
+                            const card = document.getElementById(`${type}-${category}-${index}`);
+                            if (card) {
+                                let searchableText = (type === 'job')
+                                    ? `${item.title} ${item.visMaVie} ${item.keywords}`
+                                    : `${item.title} ${item.details.ecole || ''} ${item.details.diplome || ''} ${item.details.type_eleve || ''}`;
+                                
+                                if (searchableText.toLowerCase().includes(searchTerm)) {
+                                    card.style.display = '';
+                                    if (resultsCount.hasOwnProperty(category)) {
+                                        resultsCount[category]++;
+                                    }
+                                } else {
+                                    card.style.display = 'none';
                                 }
-                            } else {
-                                // Sinon, on cache la fiche
-                                card.style.display = 'none';
                             }
-                        }
-                    });
+                        });
+                    }
                 });
             });
             
-            // ======================================================================
-            // !! LIGNE DE DÉBUG !! : Affiche les compteurs dans la console
-            console.log("Résultats trouvés :", resultsCount);
-            // ======================================================================
-
-            // On met à jour les points de notification
             const businessDot = document.getElementById('business-dot');
             const socialDot = document.getElementById('social-dot');
             const droitDot = document.getElementById('droit-dot');
@@ -1503,7 +1491,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         },
 
-       openJobModal(job) {
+        openJobModal(job) {
             this.modalContent.innerHTML = `
                 <h2 class="text-3xl font-bold mb-2 font-serif text-gray-800">${job.title}</h2>
                 <div class="flex flex-wrap gap-x-4 gap-y-2 text-sm text-gray-500 mb-6 border-b pb-4">
@@ -1511,26 +1499,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     <span><strong>Salaire senior:</strong> ${job.salaire_senior}</span>
                 </div>
                 <div class="prose max-w-none text-gray-700 space-y-4">
-                    <div>
-                        <h3 class="font-semibold text-lg text-gray-800">Vis ma vie de...</h3>
-                        <p>${job.visMaVie}</p>
-                    </div>
-                     <div>
-                        <h3 class="font-semibold text-lg text-gray-800 mt-4">Parcours type</h3>
-                        <p><strong>Débutant :</strong> ${job.debutant}</p>
-                        <p><strong>Senior :</strong> ${job.senior}</p>
-                        <p><strong>Évolution :</strong> ${job.evolution}</p>
-                    </div>
-                     <div>
-                        <h3 class="font-semibold text-lg text-gray-800 mt-4">Mots-clés</h3>
-                        <div class="flex flex-wrap gap-2">
-                            ${job.keywords.split(', ').map(k => `<span class="bg-gray-200 text-gray-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">${k}</span>`).join('')}
-                        </div>
-                    </div>
+                    <div><h3 class="font-semibold text-lg text-gray-800">Vis ma vie de...</h3><p>${job.visMaVie}</p></div>
+                    <div><h3 class="font-semibold text-lg text-gray-800 mt-4">Parcours type</h3><p><strong>Débutant :</strong> ${job.debutant}</p><p><strong>Senior :</strong> ${job.senior}</p><p><strong>Évolution :</strong> ${job.evolution}</p></div>
+                    <div><h3 class="font-semibold text-lg text-gray-800 mt-4">Mots-clés</h3><div class="flex flex-wrap gap-2">${job.keywords.split(', ').map(k => `<span class="bg-gray-200 text-gray-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">${k}</span>`).join('')}</div></div>
                 </div>
-                <div class="text-center mt-8">
-                     <a href="${job.link}" target="_blank" rel="noopener noreferrer" class="inline-block bg-indigo-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-indigo-700 transition-colors">En savoir plus</a>
-                </div>
+                <div class="text-center mt-8"><a href="${job.link}" target="_blank" rel="noopener noreferrer" class="inline-block bg-indigo-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-indigo-700 transition-colors">En savoir plus</a></div>
                 <button id="closeJobModal" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-3xl">×</button>
             `;
             this.modal.classList.remove('hidden');
@@ -1544,9 +1517,7 @@ document.addEventListener('DOMContentLoaded', () => {
         closeJobModal() {
             this.modal.classList.add('opacity-0');
             this.modalContent.classList.add('scale-95');
-            setTimeout(() => {
-                this.modal.classList.add('hidden');
-            }, 300);
+            setTimeout(() => { this.modal.classList.add('hidden'); }, 300);
         },
         
         setupSchoolModal() {
@@ -1556,39 +1527,29 @@ document.addEventListener('DOMContentLoaded', () => {
         },
 
         openSchoolModal(school) {
-            let contentHtml = '';
-            
             const formatBulletPoints = (text) => {
                 if (!text) return '';
-                if (text.includes('*') || text.includes('\n-')) {
-                     return '<ul>' + text.split(/\*|\n-/).filter(s => s.trim()).map(s => `<li class="flex mb-1"><span class="mr-2 mt-1.5 w-1.5 h-1.5 bg-gray-400 rounded-full flex-shrink-0"></span><span>${s.trim()}</span></li>`).join('') + '</ul>';
-                }
-                return `<p>${text}</p>`;
+                return text.includes('*') || text.includes('\n-')
+                    ? '<ul>' + text.split(/\*|\n-/).filter(s => s.trim()).map(s => `<li class="flex mb-1"><span class="mr-2 mt-1.5 w-1.5 h-1.5 bg-gray-400 rounded-full flex-shrink-0"></span><span>${s.trim()}</span></li>`).join('') + '</ul>'
+                    : `<p>${text}</p>`;
             };
-
-            if (school.details) {
-                contentHtml = `
-                    <h2 class="text-3xl font-bold mb-2 font-serif text-gray-800">${school.title}</h2>
-                    ${school.details.ecole ? `<p class="text-sm text-gray-500 mb-4">${school.details.ecole}</p>` : ''}
-                    ${school.details.diplome ? `<div class="mb-4"><h3 class="font-semibold text-lg text-gray-700 mb-1">Diplôme</h3><p class="text-gray-600">${school.details.diplome}</p></div>` : ''}
-                    ${school.details.type_eleve ? `<div class="mb-4"><h3 class="font-semibold text-lg text-gray-700 mb-1">Profil d'élève</h3><p class="text-gray-600">${school.details.type_eleve}</p></div>` : ''}
-                    ${school.details.admission ? `<div class="mb-4"><h3 class="font-semibold text-lg text-gray-700 mb-1">Admission</h3><p class="text-gray-600">${school.details.admission}</p></div>` : ''}
-                    <div class="grid md:grid-cols-2 gap-4 my-6">
-                        ${school.details.pour_toi_si ? `<div class="p-4 bg-green-50 rounded-lg border border-green-200"><h4 class="font-semibold text-green-800 mb-2">✅ Pour toi si...</h4><div class="text-gray-600 space-y-1">${formatBulletPoints(school.details.pour_toi_si)}</div></div>` : ''}
-                        ${school.details.pas_pour_toi_si ? `<div class="p-4 bg-red-50 rounded-lg border border-red-200"><h4 class="font-semibold text-red-800 mb-2">❌ Pas pour toi si...</h4><div class="text-gray-600 space-y-1">${formatBulletPoints(school.details.pas_pour_toi_si)}</div></div>` : ''}
-                    </div>
-                    ${school.details.comparaison_fac ? `<div class="mb-4"><h3 class="font-semibold text-lg text-gray-700 mb-1">Comparaison avec la Fac</h3><p class="text-gray-600">${school.details.comparaison_fac}</p></div>` : ''}
-                    ${school.details.renommee ? `<div class="mb-4"><h3 class="font-semibold text-lg text-gray-700 mb-1">Renommée & Reconnaissance</h3><p class="text-gray-600">${school.details.renommee}</p></div>` : ''}
-                    ${school.details.salaire_moyen ? `<div class="mb-4"><h3 class="font-semibold text-lg text-gray-700 mb-1">Salaire moyen à la sortie</h3><p class="text-gray-600">${school.details.salaire_moyen}</p></div>` : ''}
-                    ${school.details.adresse ? `<div class="mb-4"><h3 class="font-semibold text-lg text-gray-700 mb-1">Adresse</h3><p class="text-gray-600">${school.details.adresse}</p></div>` : ''}
-                    <div class="text-center mt-6">
-                        <a href="${school.link}" target="_blank" rel="noopener noreferrer" class="inline-block bg-gray-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-gray-700 transition-colors">Découvrir le site de l'école</a>
-                    </div>
-                    <button id="closeSchoolModal" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-3xl">×</button>
-                `;
-            }
-            this.schoolModalContent.innerHTML = contentHtml;
-
+            this.schoolModalContent.innerHTML = school.details ? `
+                <h2 class="text-3xl font-bold mb-2 font-serif text-gray-800">${school.title}</h2>
+                ${school.details.ecole ? `<p class="text-sm text-gray-500 mb-4">${school.details.ecole}</p>` : ''}
+                ${school.details.diplome ? `<div class="mb-4"><h3 class="font-semibold text-lg text-gray-700 mb-1">Diplôme</h3><p class="text-gray-600">${school.details.diplome}</p></div>` : ''}
+                ${school.details.type_eleve ? `<div class="mb-4"><h3 class="font-semibold text-lg text-gray-700 mb-1">Profil d'élève</h3><p class="text-gray-600">${school.details.type_eleve}</p></div>` : ''}
+                ${school.details.admission ? `<div class="mb-4"><h3 class="font-semibold text-lg text-gray-700 mb-1">Admission</h3><p class="text-gray-600">${school.details.admission}</p></div>` : ''}
+                <div class="grid md:grid-cols-2 gap-4 my-6">
+                    ${school.details.pour_toi_si ? `<div class="p-4 bg-green-50 rounded-lg border border-green-200"><h4 class="font-semibold text-green-800 mb-2">✅ Pour toi si...</h4><div class="text-gray-600 space-y-1">${formatBulletPoints(school.details.pour_toi_si)}</div></div>` : ''}
+                    ${school.details.pas_pour_toi_si ? `<div class="p-4 bg-red-50 rounded-lg border border-red-200"><h4 class="font-semibold text-red-800 mb-2">❌ Pas pour toi si...</h4><div class="text-gray-600 space-y-1">${formatBulletPoints(school.details.pas_pour_toi_si)}</div></div>` : ''}
+                </div>
+                ${school.details.comparaison_fac ? `<div class="mb-4"><h3 class="font-semibold text-lg text-gray-700 mb-1">Comparaison avec la Fac</h3><p class="text-gray-600">${school.details.comparaison_fac}</p></div>` : ''}
+                ${school.details.renommee ? `<div class="mb-4"><h3 class="font-semibold text-lg text-gray-700 mb-1">Renommée & Reconnaissance</h3><p class="text-gray-600">${school.details.renommee}</p></div>` : ''}
+                ${school.details.salaire_moyen ? `<div class="mb-4"><h3 class="font-semibold text-lg text-gray-700 mb-1">Salaire moyen à la sortie</h3><p class="text-gray-600">${school.details.salaire_moyen}</p></div>` : ''}
+                ${school.details.adresse ? `<div class="mb-4"><h3 class="font-semibold text-lg text-gray-700 mb-1">Adresse</h3><p class="text-gray-600">${school.details.adresse}</p></div>` : ''}
+                <div class="text-center mt-6"><a href="${school.link}" target="_blank" rel="noopener noreferrer" class="inline-block bg-gray-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-gray-700 transition-colors">Découvrir le site de l'école</a></div>
+                <button id="closeSchoolModal" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-3xl">×</button>
+            ` : '';
             this.schoolModal.classList.remove('hidden');
             setTimeout(() => {
                 this.schoolModal.classList.remove('opacity-0');
@@ -1600,9 +1561,7 @@ document.addEventListener('DOMContentLoaded', () => {
         closeSchoolModal() {
             this.schoolModal.classList.add('opacity-0');
             this.schoolModalContent.classList.add('scale-95');
-            setTimeout(() => {
-                this.schoolModal.classList.add('hidden');
-            }, 300);
+            setTimeout(() => { this.schoolModal.classList.add('hidden'); }, 300);
         },
         
         // =================================================================
@@ -1615,12 +1574,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 jobs.forEach(job => {
                     const row = document.createElement('tr');
                     row.className = 'border-b hover:bg-gray-50';
-                    row.innerHTML = `
-                        <td class="py-3 px-4 font-semibold">${job.title}</td>
-                        <td class="py-3 px-4 capitalize">${category}</td>
-                        <td class="py-3 px-4">${job.salaire_debutant}</td>
-                        <td class="py-3 px-4">${job.salaire_senior}</td>
-                    `;
+                    row.innerHTML = `<td class="py-3 px-4 font-semibold">${job.title}</td><td class="py-3 px-4 capitalize">${category}</td><td class="py-3 px-4">${job.salaire_debutant}</td><td class="py-3 px-4">${job.salaire_senior}</td>`;
                     tableBody.appendChild(row);
                 });
             });
@@ -1634,12 +1588,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const row = document.createElement('tr');
                     const city = school.details.adresse.split(',').pop().trim().replace(/\d{5}\s/,'').replace(' Cedex','');
                     row.className = 'border-b hover:bg-gray-50';
-                    row.innerHTML = `
-                        <td class="py-3 px-4 font-semibold">${school.title}</td>
-                        <td class="py-3 px-4">${school.details.diplome}</td>
-                        <td class="py-3 px-4 capitalize">${category}</td>
-                        <td class="py-3 px-4">${city}</td>
-                    `;
+                    row.innerHTML = `<td class="py-3 px-4 font-semibold">${school.title}</td><td class="py-3 px-4">${school.details.diplome}</td><td class="py-3 px-4 capitalize">${category}</td><td class="py-3 px-4">${city}</td>`;
                     tableBody.appendChild(row);
                 });
             });
@@ -1651,20 +1600,18 @@ document.addEventListener('DOMContentLoaded', () => {
             searchInput.addEventListener('input', (e) => {
                 const filter = e.target.value.toLowerCase();
                 tableBody.querySelectorAll('tr').forEach(row => {
-                    const text = row.textContent.toLowerCase();
-                    row.style.display = text.includes(filter) ? '' : 'none';
+                    row.style.display = row.textContent.toLowerCase().includes(filter) ? '' : 'none';
                 });
             });
         },
 
-	setupSchoolsTableSearch() {
+        setupSchoolsTableSearch() {
             const searchInput = document.getElementById('schools-table-search-input');
             const tableBody = document.getElementById('schools-table-body');
             searchInput.addEventListener('input', (e) => {
                 const filter = e.target.value.toLowerCase();
                 tableBody.querySelectorAll('tr').forEach(row => {
-                    const text = row.textContent.toLowerCase();
-                    row.style.display = text.includes(filter) ? '' : 'none';
+                    row.style.display = row.textContent.toLowerCase().includes(filter) ? '' : 'none';
                 });
             });
         },
@@ -1675,7 +1622,6 @@ document.addEventListener('DOMContentLoaded', () => {
         setupGeminiSearch() {
             const button = document.getElementById('gemini-button');
             const promptInput = document.getElementById('gemini-prompt');
-
             button.addEventListener('click', () => this.handleGeminiSearch());
             promptInput.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter' && !e.shiftKey) {
@@ -1686,11 +1632,11 @@ document.addEventListener('DOMContentLoaded', () => {
         },
 
         async handleGeminiSearch() {
-            // Le code pour cette fonction n'a pas changé.
+            // ... (Code original pour handleGeminiSearch, inchangé)
         },
 
         renderGeminiResults(titles) {
-            // Le code pour cette fonction n'a pas changé.
+             // ... (Code original pour renderGeminiResults, inchangé)
         },
 
         // =================================================================
@@ -1698,13 +1644,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // =================================================================
         renderChart(filter = 'all') {
             const ctx = document.getElementById('salaryChart').getContext('2d');
-            
-            let filteredJobs = [];
-            if (filter === 'all') {
-                filteredJobs = [...jobsData.business, ...jobsData.social, ...jobsData.droit];
-            } else {
-                filteredJobs = jobsData[filter];
-            }
+            let filteredJobs = (filter === 'all')
+                ? [...jobsData.business, ...jobsData.social, ...jobsData.droit]
+                : jobsData[filter];
 
             const parseSalary = (salaryRange) => {
                 const value = salaryRange.match(/\d+/);
@@ -1724,34 +1666,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 data: {
                     labels: labels,
                     datasets: [
-                        {
-                            label: 'Salaire Débutant (k€/an)',
-                            data: debutantSalaries,
-                            backgroundColor: 'rgba(59, 130, 246, 0.6)',
-                            borderColor: 'rgba(59, 130, 246, 1)',
-                            borderWidth: 1
-                        },
-                        {
-                            label: 'Salaire Senior (k€/an)',
-                            data: seniorSalaries,
-                            backgroundColor: 'rgba(239, 68, 68, 0.6)',
-                            borderColor: 'rgba(239, 68, 68, 1)',
-                            borderWidth: 1
-                        }
+                        { label: 'Salaire Débutant (k€/an)', data: debutantSalaries, backgroundColor: 'rgba(59, 130, 246, 0.6)', borderColor: 'rgba(59, 130, 246, 1)', borderWidth: 1 },
+                        { label: 'Salaire Senior (k€/an)', data: seniorSalaries, backgroundColor: 'rgba(239, 68, 68, 0.6)', borderColor: 'rgba(239, 68, 68, 1)', borderWidth: 1 }
                     ]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            title: {
-                                display: true,
-                                text: 'Salaire Brut Annuel (en k€)'
-                            }
-                        }
-                    },
+                    scales: { y: { beginAtZero: true, title: { display: true, text: 'Salaire Brut Annuel (en k€)' } } },
                     plugins: {
                         legend: { position: 'top' },
                         tooltip: {
@@ -1770,7 +1692,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
 
         setupChartFilter() {
-            const chartFilter = document.getElementById('chartFilter');
+            const chartFilter = document.getElementById('chart-filter');
             chartFilter.addEventListener('change', (e) => {
                 this.renderChart(e.target.value);
             });
@@ -1781,13 +1703,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-
 </script>
 </body>
 </html>
-
-
-
-
-
-
