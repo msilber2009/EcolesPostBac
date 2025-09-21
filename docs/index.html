@@ -77,34 +77,7 @@
             position: absolute;
             border: 0;
 
-.notification-dot {
-    display: block !important;
-    position: absolute !important;
-    top: 15px !important;
-    right: 12px !important;
-    width: 9px !important;
-    height: 9px !important;
-    background-color: #ef4444 !important; /* Rouge vif */
-    border-radius: 50% !important;
-    border: 1.5px solid white !important;
-    z-index: 10 !important; /* Assure que le point est par-dessus le texte */
-    animation: pulse 1.5s infinite !important;
-}
 
-@keyframes pulse {
-    0% {
-        transform: scale(0.95);
-        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
-    }
-    70% {
-        transform: scale(1);
-        box-shadow: 0 0 0 7px rgba(239, 68, 68, 0);
-    }
-    100% {
-        transform: scale(0.95);
-        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
-    }
-}
 
 
         }
@@ -144,29 +117,38 @@
         </section>
 
 <nav class="flex justify-center border-b-2 border-gray-200 mb-8 flex-wrap">
-    
+
     <button data-tab="business" class="tab-btn relative text-gray-500 py-4 px-6 block hover:text-gray-700 focus:outline-none border-b-4 border-transparent tab-active">
         Business
-        <span id="business-dot" class="hidden absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
+        <span id="business-dot" class="absolute top-2 right-2 flex h-3 w-3 hidden">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+        </span>
     </button>
-    
+
     <button data-tab="social" class="tab-btn relative text-gray-500 py-4 px-6 block hover:text-gray-700 focus:outline-none border-b-4 border-transparent">
         Social
-        <span id="social-dot" class="hidden absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
+        <span id="social-dot" class="absolute top-2 right-2 flex h-3 w-3 hidden">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+        </span>
     </button>
-    
+
     <button data-tab="droit" class="tab-btn relative text-gray-500 py-4 px-6 block hover:text-gray-700 focus:outline-none border-b-4 border-transparent">
         Droit
-        <span id="droit-dot" class="hidden absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
+        <span id="droit-dot" class="absolute top-2 right-2 flex h-3 w-3 hidden">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+        </span>
     </button>
     
-    <button data-tab="synthese" class="tab-btn text-gray-500 py-4 px-6 block hover:text-gray-700 focus:outline-none border-b-4 border-transparent">
-        Synthèse
-    </button>
+    <button data-tab="focus-ecoles" class="tab-btn text-gray-500 py-4 px-6 block hover:text-gray-700 focus:outline-none border-b-4 border-transparent"> Grandes Écoles IdF</button>
+
+    <button data-tab="guide-sesame" class="tab-btn text-gray-500 py-4 px-6 block hover:text-gray-700 focus:outline-none border-b-4 border-transparent"> SÉSAME 📝</button>
     
-    <button data-tab="conseiller-ia" class="tab-btn text-gray-500 py-4 px-6 block hover:text-gray-700 focus:outline-none border-b-4 border-transparent hidden">
-        Conseiller IA ✨
-    </button>
+    <button data-tab="synthese" class="tab-btn text-gray-500 py-4 px-6 block hover:text-gray-700 focus:outline-none border-b-4 border-transparent">Synthèse</button>
+    
+    <button data-tab="conseiller-ia" class="tab-btn text-gray-500 py-4 px-6 block hover:text-gray-700 focus:outline-none border-b-4 border-transparent hidden">Conseiller IA ✨</button>
 
 </nav>
 
@@ -202,7 +184,196 @@
                     <div class="map-container rounded-lg shadow-lg"><iframe src="https://www.google.com/maps/d/embed?mid=1C1zbHrfx1-2ErjZAZUy8xa8mIWfxTO4&ehbc=2E312F&noprof=1" width="640" height="480"></iframe></div>
                 </div>
             </div>
-            <div id="synthese" class="tab-content hidden">
+           
+<div id="focus-ecoles" class="tab-content hidden">
+    
+    <header class="text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold font-serif text-gray-700">🎯 Focus sur les Grandes Écoles en Île-de-France</h2>
+        <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">
+            Cette section se concentre sur les écoles de commerce accessibles post-bac via le Concours SÉSAME et qui possèdent un campus principal ou significatif à Paris ou en Île-de-France.
+        </p>
+    </header>
+
+    <section class="mb-12">
+        <h3 class="text-2xl font-semibold mb-6 text-gray-600">🎓 Le Programme Grande École (PGE) en 5 ans</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-blue-500">
+                <h4 class="text-xl font-bold text-gray-800 mb-2">Paris School of Business (PSB)</h4>
+                <p class="text-gray-600">Située au cœur de Paris, PSB propose des parcours de spécialisation variés en marketing, finance et management. L'école se distingue par un fort accent sur l'innovation et l'entrepreneuriat.</p>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-blue-500">
+                <h4 class="text-xl font-bold text-gray-800 mb-2">EMLV - École de Management</h4>
+                <p class="text-gray-600">Son campus moderne à La Défense offre une proximité avec le monde de l'entreprise. L'EMLV se démarque par sa pédagogie interdisciplinaire en collaboration avec ses écoles d'ingénieurs et du digital.</p>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-blue-500">
+                <h4 class="text-xl font-bold text-gray-800 mb-2">EBS Paris</h4>
+                <p class="text-gray-600">Cette école met l'accent sur l'international, l'entrepreneuriat et la digitalisation, avec une forte composante de stages et d'alternance. Le campus est au centre de Paris.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="mb-12">
+        <h3 class="text-2xl font-semibold mb-6 text-gray-600">🌍 Le Bachelor in Business Administration (BBA) en 4 ans</h3>
+        <p class="mb-6 text-gray-600 max-w-2xl">C'est un diplôme de niveau bac+4, très axé sur l'international, qui se concentre sur les fondamentaux de la gestion d'entreprise. Il s'agit d'une formation professionnalisante.</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-green-500">
+                <h4 class="text-xl font-bold text-gray-800 mb-2">NEOMA Business School</h4>
+                <p class="text-gray-600">Son Global BBA à Paris offre un programme très orienté vers l'international avec la possibilité de réaliser des échanges académiques et des stages à l'étranger. Spécialisations en finance, communication ou data science.</p>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-green-500">
+                <h4 class="text-xl font-bold text-gray-800 mb-2">KEDGE Business School</h4>
+                <p class="text-gray-600">Le campus parisien de KEDGE propose un International BBA qui permet d'acquérir une double compétence de manager et d'expert. Le programme est reconnu pour son parcours professionnalisant.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="mb-12">
+        <h3 class="text-2xl font-semibold mb-6 text-gray-600">📊 Données Comparatives (2024)</h3>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div>
+                <h4 class="text-xl font-bold text-gray-700 mb-4">Débouchés et Salaires</h4>
+                <div class="overflow-x-auto bg-white rounded-lg shadow">
+                    <table class="w-full text-sm text-left text-gray-500">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                            <tr>
+                                <th class="py-3 px-4">École</th>
+                                <th class="py-3 px-4">Salaire sortie (brut)</th>
+                                <th class="py-3 px-4">Taux d'emploi (6 mois)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b"> <td class="py-3 px-4 font-semibold">KEDGE</td> <td class="py-3 px-4">45-50k €</td> <td class="py-3 px-4">99%</td> </tr>
+                            <tr class="border-b"> <td class="py-3 px-4 font-semibold">NEOMA</td> <td class="py-3 px-4">47-52k €</td> <td class="py-3 px-4">100%</td> </tr>
+                            <tr class="border-b"> <td class="py-3 px-4 font-semibold">PSB</td> <td class="py-3 px-4">35.5k €</td> <td class="py-3 px-4">93%</td> </tr>
+                            <tr class="border-b"> <td class="py-3 px-4 font-semibold">EMLV</td> <td class="py-3 px-4">44k €</td> <td class="py-3 px-4">92%</td> </tr>
+                            <tr> <td class="py-3 px-4 font-semibold">EBS Paris</td> <td class="py-3 px-4">40.4k €</td> <td class="py-3 px-4">98%</td> </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div>
+                <h4 class="text-xl font-bold text-gray-700 mb-4">Admissions via Concours SÉSAME</h4>
+                <div class="overflow-x-auto bg-white rounded-lg shadow">
+                    <table class="w-full text-sm text-left text-gray-500">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                            <tr>
+                                <th class="py-3 px-4">École</th>
+                                <th class="py-3 px-4">Places</th>
+                                <th class="py-3 px-4">Sélectivité</th>
+                                <th class="py-3 px-4">Rang dernier admis</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b"> <td class="py-3 px-4 font-semibold">PSB</td> <td class="py-3 px-4">300</td> <td class="py-3 px-4">6%</td> <td class="py-3 px-4">1655</td> </tr>
+                            <tr class="border-b"> <td class="py-3 px-4 font-semibold">EMLV</td> <td class="py-3 px-4">300</td> <td class="py-3 px-4">6%</td> <td class="py-3 px-4">2690</td> </tr>
+                            <tr class="border-b"> <td class="py-3 px-4 font-semibold">EBS Paris</td> <td class="py-3 px-4">200</td> <td class="py-3 px-4">10%</td> <td class="py-3 px-4">3381</td> </tr>
+                            <tr class="border-b"> <td class="py-3 px-4 font-semibold">KEDGE</td> <td class="py-3 px-4">385</td> <td class="py-3 px-4">26%</td> <td class="py-3 px-4">N/C</td> </tr>
+                            <tr> <td class="py-3 px-4 font-semibold">NEOMA</td> <td class="py-3 px-4">300</td> <td class="py-3 px-4">10%</td> <td class="py-3 px-4">N/C</td> </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="text-center mt-12">
+        <p class="text-sm text-gray-500 max-w-3xl mx-auto">
+            Note : Les données sont indicatives et basées sur des rapports publics et des discussions d'étudiants pour le concours 2024. Le rang du dernier admis varie chaque année.
+        </p>
+    </footer>
+    
+</div>
+
+<div id="guide-sesame" class="tab-content hidden">
+    
+    <header class="text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold font-serif text-gray-700">📝 Guide de préparation au Concours SÉSAME</h2>
+        <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">
+            Le Concours SÉSAME est l'un des principaux concours post-bac pour les écoles de commerce. Il se divise en deux parties : les épreuves écrites et les oraux.
+        </p>
+    </header>
+
+    <section class="mb-12 grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-bold text-gray-800 mb-4">Contenu des épreuves écrites</h3>
+            <ul class="list-disc list-inside text-gray-700 space-y-2">
+                <li>Questions à choix multiples (QCM) sur l'Anglais, les mathématiques et la logique, et le français.</li>
+                <li>Synthèse de textes.</li>
+            </ul>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-bold text-gray-800 mb-4">📅 Dates Clés</h3>
+            <ul class="list-disc list-inside text-gray-700 space-y-2">
+                <li><strong>Janvier - Mars :</strong> Inscriptions sur Parcoursup.</li>
+                <li><strong>Avril :</strong> Épreuves écrites.</li>
+                <li><strong>Mai :</strong> Épreuves orales.</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="mb-12">
+        <h3 class="text-2xl font-semibold text-center mb-6 text-gray-600">Prépa vs. Préparation autonome</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-blue-500">
+                <h4 class="text-xl font-bold text-gray-800 mb-2">Avec une prépa</h4>
+                <p class="text-gray-600 mb-4">Offre un cadre structuré, des examens blancs réguliers et un accompagnement ciblé. Un bon choix si vous avez besoin d'un encadrement strict.</p>
+                <span class="text-sm font-semibold text-blue-600">Types de stages :</span>
+                <ul class="text-sm text-gray-600 mt-2 space-y-1">
+                    <li><strong>Annuel :</strong> Préparation en profondeur sur plusieurs mois.</li>
+                    <li><strong>De révision :</strong> Court et intensif pendant les vacances, par exemple 30h en février puis 12h en intensif. Enfin une prépa aux oraux.</li>
+                </ul>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500">
+                <h4 class="text-xl font-bold text-gray-800 mb-2">Sans prépa (Autonome)</h4>
+                <p class="text-gray-600">Il est tout à fait possible de se préparer seul avec des annales, des livres et des ressources en ligne. La clé est l'assiduité et la discipline.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="mb-12">
+        <h3 class="text-2xl font-semibold text-center mb-8 text-gray-600">🗓️ Plan de Révision Annuel (Conseil)</h3>
+        <div class="max-w-2xl mx-auto space-y-6">
+            <div class="flex">
+                <div class="flex flex-col items-center mr-4">
+                    <div><div class="flex items-center justify-center w-10 h-10 bg-indigo-500 rounded-full text-white font-bold">1</div></div>
+                    <div class="w-px h-full bg-gray-300"></div>
+                </div>
+                <div class="pb-8">
+                    <p class="mb-2 text-lg font-semibold">Septembre - Décembre</p>
+                    <p class="text-gray-600">Consolidez vos acquis en terminale et repérez les matières à renforcer. Effectuez un premier test blanc pour évaluer votre niveau.</p>
+                </div>
+            </div>
+            <div class="flex">
+                <div class="flex flex-col items-center mr-4">
+                    <div><div class="flex items-center justify-center w-10 h-10 bg-indigo-500 rounded-full text-white font-bold">2</div></div>
+                    <div class="w-px h-full bg-gray-300"></div>
+                </div>
+                <div class="pb-8">
+                    <p class="mb-2 text-lg font-semibold">Janvier - Février</p>
+                    <p class="text-gray-600">Concentrez-vous sur les matières à gros coefficient. Entraînez-vous avec les annales et approfondissez vos connaissances.</p>
+                </div>
+            </div>
+            <div class="flex">
+                <div class="flex flex-col items-center mr-4">
+                    <div><div class="flex items-center justify-center w-10 h-10 bg-indigo-500 rounded-full text-white font-bold">3</div></div>
+                </div>
+                <div class="pb-8">
+                    <p class="mb-2 text-lg font-semibold">Mars - Avril</p>
+                    <p class="text-gray-600">Préparez la synthèse et les oraux. Faites des révisions intensives et chronométrées. Passez le concours et félicitez-vous !</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="mt-12">
+        <div class="max-w-3xl mx-auto bg-green-50 border-l-4 border-green-500 p-6 rounded-r-lg">
+            <h4 class="text-xl font-bold text-green-800 mb-2">✅ Recommandations finales</h4>
+            <p class="text-green-700">Pour réussir, le plus important est de comprendre la logique du concours et de ne pas se contenter des connaissances du lycée. Que vous choisissiez une prépa ou une préparation autonome, le facteur clé de succès est une bonne organisation et une pratique régulière.</p>
+        </div>
+    </section>
+</div>
+
+ <div id="synthese" class="tab-content hidden">
                 <h2 class="text-3xl font-bold font-serif mb-6 text-gray-700">Synthèse et Comparaison</h2>
                 
                 <div class="mb-12">
@@ -1706,3 +1877,4 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 </body>
 </html>
+
